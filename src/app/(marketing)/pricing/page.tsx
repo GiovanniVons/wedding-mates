@@ -7,8 +7,13 @@ import { Chip } from "@/components/ui/Chip";
 import { Card, PricingCard } from "@/components/ui/Card";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { ScrollReveal, RevealItem } from "@/components/animations/ScrollReveal";
-import { JsonLd, productSchema, courseSchema } from "@/components/seo/JsonLd";
-import { PRICING_INCLUSIONS, EXTRAS } from "@/content/copy";
+import {
+  JsonLd,
+  productSchema,
+  courseSchema,
+  aggregateRatingSchema,
+} from "@/components/seo/JsonLd";
+import { PRICING_INCLUSIONS, EXTRAS, TESTIMONIALS } from "@/content/copy";
 
 export const metadata: Metadata = pageMetadata({
   title: "Friend Led Wedding, One Price: $950 | Let's Get Wed",
@@ -23,7 +28,14 @@ export const metadata: Metadata = pageMetadata({
 export default function PricingPage() {
   return (
     <>
-      <JsonLd data={[productSchema(), courseSchema()]} />
+      {/* aggregateRating attaches only when fully-rated, rights-cleared reviews
+          exist (null while TESTIMONIALS is empty, so no rating ships today). */}
+      <JsonLd
+        data={[
+          productSchema(aggregateRatingSchema(TESTIMONIALS)),
+          courseSchema(),
+        ]}
+      />
 
       {/* Section 1: The Package */}
       <Section space="page-top" spaceBottom="main">

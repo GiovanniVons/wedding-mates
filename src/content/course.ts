@@ -36,7 +36,11 @@ export interface CourseModule {
   estTime: string;
   /** The Introduction is flagged so the shell can label it module 0. */
   isIntro?: boolean;
-  /** Single swap-point for the lesson video; null until the client supplies one. */
+  /**
+   * Single swap-point for the lesson video; null until the client supplies one.
+   * MUST be an EMBED url (YouTube: /embed/VIDEO_ID, Vimeo: player.vimeo.com/...),
+   * NOT a watch/share link (youtube.com/watch?v=... renders a refused frame).
+   */
   videoUrl: string | null;
   /** Verbatim body copy, markdown. */
   bodyMd: string;

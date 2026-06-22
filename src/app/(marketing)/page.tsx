@@ -6,7 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { HypeLine } from "@/components/ui/HypeLine";
-import { StepCard, FeatureCard, PricingCard } from "@/components/ui/Card";
+import { StepCard, FeatureCard, PricingCard, LoveStoryCard } from "@/components/ui/Card";
 import { Accordion } from "@/components/ui/Accordion";
 import { HomeHero } from "@/components/sections/HomeHero";
 import { CtaBand } from "@/components/sections/CtaBand";
@@ -17,7 +17,9 @@ import {
   BLUEPRINT_FEATURES,
   HOME_INCLUSIONS,
   HOME_FAQ,
+  LOVE_STORIES,
 } from "@/content/copy";
+import { getSortedPosts } from "@/content/blog";
 
 export const metadata: Metadata = pageMetadata({
   title: "Friend Led Wedding Ceremonies | Let's Get Wed",
@@ -342,24 +344,98 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* ── Section 8: Featured Love Stories (CONDITIONAL on rights) ── */}
-      {CONTENT_FLAGS.loveStoriesHaveRights && (
+      {/* ── Section 8: Featured Love Stories (CONDITIONAL on rights) ──
+          Renders the 2-up gallery grid from LOVE_STORIES. Gated on BOTH the flag
+          and the data being present, so the section never ships as an orphan
+          heading: to surface it, paste entries into LOVE_STORIES and flip
+          loveStoriesHaveRights (src/lib/site.ts). */}
+      {CONTENT_FLAGS.loveStoriesHaveRights && LOVE_STORIES.length > 0 && (
         <Section space="main">
           <Container>
-            <h2 className="h2" style={{ marginTop: 0, color: "var(--color-grape)" }}>
-              Real Couples, Real Mates
-            </h2>
+            <ScrollReveal className="mb-[var(--space-6)] max-w-[var(--container-narrow)]">
+              <Chip variant="loud" className="mb-[var(--space-3)]">
+                Love Stories
+              </Chip>
+              <h2 className="h2" style={{ margin: 0, color: "var(--color-grape)" }}>
+                Real Couples, Real Mates
+              </h2>
+            </ScrollReveal>
+            <ScrollReveal
+              stagger
+              className="grid grid-cols-1 gap-[var(--space-4)] sm:grid-cols-2"
+            >
+              {LOVE_STORIES.slice(0, 2).map((s) => (
+                <RevealItem key={s.slug}>
+                  <LoveStoryCard
+                    couple={s.couple}
+                    imageSrc={s.imageSrc}
+                    imageAlt={s.imageAlt}
+                    href={`/love-stories/${s.slug}`}
+                  />
+                </RevealItem>
+              ))}
+            </ScrollReveal>
+            <ScrollReveal className="mt-[var(--space-6)]">
+              <a href="/reviews">See all the love stories</a>
+            </ScrollReveal>
           </Container>
         </Section>
       )}
 
-      {/* ── Section 9: Blog Teaser (CONDITIONAL on real posts) ── */}
-      {CONTENT_FLAGS.blogHasPosts && (
+      {/* ── Section 9: Blog Teaser (CONDITIONAL on real posts) ──
+          Renders the 3 most recent posts. Gated on BOTH the flag and posts
+          existing, so it never ships as an orphan heading: to surface it, add a
+          post to POSTS (src/content/blog.ts) and flip blogHasPosts. */}
+      {CONTENT_FLAGS.blogHasPosts && getSortedPosts().length > 0 && (
         <Section space="main">
           <Container>
-            <h2 className="h2" style={{ marginTop: 0, color: "var(--color-grape)" }}>
-              Wedding Inspiration
-            </h2>
+            <ScrollReveal className="mb-[var(--space-6)] max-w-[var(--container-narrow)]">
+              <Chip variant="loud" className="mb-[var(--space-3)]">
+                The Blog
+              </Chip>
+              <h2 className="h2" style={{ margin: 0, color: "var(--color-grape)" }}>
+                Wedding Inspiration
+              </h2>
+            </ScrollReveal>
+            <ScrollReveal
+              stagger
+              className="grid grid-cols-1 gap-[var(--space-4)] sm:grid-cols-3"
+            >
+              {getSortedPosts()
+                .slice(0, 3)
+                .map((post) => (
+                  <RevealItem key={post.slug}>
+                    <a
+                      href={`/blog/${post.slug}`}
+                      className="link-plain card flex h-full flex-col"
+                      style={{ padding: "var(--space-5)" }}
+                    >
+                      <span
+                        className="meta-caps"
+                        style={{ color: "var(--color-grape-soft)", marginBottom: "var(--space-2)" }}
+                      >
+                        {new Date(post.date).toLocaleDateString("en-AU", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </span>
+                      <h3
+                        className="h3"
+                        style={{ margin: 0, marginBottom: "var(--gap-title-body)", color: "var(--color-grape)" }}
+                      >
+                        {post.title}
+                      </h3>
+                      <p style={{ color: "var(--color-grape-soft)", margin: 0 }}>
+                        {post.excerpt}
+                      </p>
+                    </a>
+                  </RevealItem>
+                ))}
+            </ScrollReveal>
+            <ScrollReveal className="mt-[var(--space-6)]">
+              <a href="/blog">Read the blog</a>
+            </ScrollReveal>
           </Container>
         </Section>
       )}

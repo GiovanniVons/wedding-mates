@@ -38,7 +38,10 @@ const COLUMNS: FooterColumn[] = [
     heading: "Legal",
     links: [
       ...(CONTENT_FLAGS.termsHaveContent
-        ? [{ label: "Terms", href: "/terms" }]
+        ? [
+            { label: "Terms", href: "/terms" },
+            { label: "Refund Policy", href: "/refund" },
+          ]
         : []),
       { label: "Privacy", href: "/privacy" },
     ],
@@ -143,7 +146,7 @@ export function Footer() {
             className="flex flex-col gap-[var(--space-1)] sm:items-end"
             style={{ fontSize: "var(--font-size-text-small)", color: "var(--color-page-on-grape-o70)" }}
           >
-            <span>&copy; 2026 Wedding Mates. All rights reserved.</span>
+            <span>&copy; {new Date().getFullYear()} Wedding Mates. All rights reserved.</span>
             <span>
               Designed by{" "}
               <a href="https://giovannivons.com" rel="noopener">

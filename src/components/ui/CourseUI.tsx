@@ -6,6 +6,12 @@ import { cn } from "@/lib/utils";
  * VideoSlot -- 16:9 grape placeholder with a marigold play glyph and the
  * "Video coming soon" line. A single videoUrl swap-point renders the player
  * when a real URL exists. Never blocks the written guide below.
+ *
+ * IMPORTANT for whoever fills course.ts `videoUrl`: pass an EMBED URL, not a
+ * watch-page link. YouTube: use https://www.youtube.com/embed/VIDEO_ID (not
+ * youtube.com/watch?v=...). Vimeo: use https://player.vimeo.com/video/ID. A
+ * normal "share" / watch link will be refused by the browser and render blank.
+ * The iframe is sandboxed and uses a privacy-preserving referrer policy.
  */
 export function VideoSlot({ videoUrl }: { videoUrl?: string }) {
   if (videoUrl) {
@@ -19,6 +25,9 @@ export function VideoSlot({ videoUrl }: { videoUrl?: string }) {
           title="Lesson video"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+          sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
+          loading="lazy"
           style={{ width: "100%", height: "100%", border: 0 }}
         />
       </div>
@@ -325,28 +334,9 @@ export function CourseSidebar({
       </p>
 
       <nav aria-label="Course modules" className="flex flex-col gap-[var(--space-1)]">
-        {modules.map((m) => (
-          <a
-            key={m.label}
-            href={m.status === "locked" ? undefined : m.href}
-            aria-disabled={m.status === "locked"}
-            className="link-plain flex items-center gap-[var(--space-2)]"
-            style={{
-              padding: "var(--space-2) var(--space-3)",
-              borderRadius: "var(--radius-small)",
-              backgroundColor:
-                m.status === "current" ? "var(--color-field-coral)" : "transparent",
-              color:
-                m.status === "locked" ? "var(--color-grape-soft)" : "var(--color-grape)",
-              fontWeight:
-                m.status === "current"
-                  ? "var(--font-weight-bold)"
-                  : "var(--font-weight-medium)",
-              fontSize: "var(--font-size-text-small)",
-              opacity: m.status === "locked" ? 0.7 : 1,
-              cursor: m.status === "locked" ? "not-allowed" : "pointer",
-            }}
-          >
+        {modules.map((m) => {
+          const locked = m.status === "locked";
+          const dot = (
             <span
               aria-hidden="true"
               style={{
@@ -362,9 +352,47 @@ export function CourseSidebar({
                       : "var(--color-grape-o20)",
               }}
             />
-            {m.label}
-          </a>
-        ))}
+          );
+          const rowStyle: React.CSSProperties = {
+            padding: "var(--space-2) var(--space-3)",
+            borderRadius: "var(--radius-small)",
+            backgroundColor:
+              m.status === "current" ? "var(--color-field-coral)" : "transparent",
+            color: locked ? "var(--color-grape-soft)" : "var(--color-grape)",
+            fontWeight:
+              m.status === "current"
+                ? "var(--font-weight-bold)"
+                : "var(--font-weight-medium)",
+            fontSize: "var(--font-size-text-small)",
+            opacity: locked ? 0.7 : 1,
+          };
+          // Locked rows render as a non-interactive span (no href, no link
+          // semantics, not keyboard-focusable) rather than an <a> with no href.
+          if (locked) {
+            return (
+              <span
+                key={m.label}
+                aria-disabled="true"
+                className="flex items-center gap-[var(--space-2)]"
+                style={{ ...rowStyle, cursor: "not-allowed" }}
+              >
+                {dot}
+                {m.label}
+              </span>
+            );
+          }
+          return (
+            <a
+              key={m.label}
+              href={m.href}
+              className="link-plain flex items-center gap-[var(--space-2)]"
+              style={{ ...rowStyle, cursor: "pointer" }}
+            >
+              {dot}
+              {m.label}
+            </a>
+          );
+        })}
       </nav>
 
       <div className="mt-[var(--space-6)]">

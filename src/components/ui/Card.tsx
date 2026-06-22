@@ -482,11 +482,97 @@ export function ModuleCard({
   );
 }
 
+interface TestimonialCardProps {
+  name: string;
+  role?: string;
+  quote: string;
+  rating?: number;
+}
+
+/**
+ * TestimonialCard -- a rights-cleared review: an oversized grape quote mark
+ * overprinting the corner (poster vocabulary), the quote, then the attribution.
+ * Only ever rendered from real TESTIMONIALS data; never a fabricated quote.
+ */
+export function TestimonialCard({
+  name,
+  role,
+  quote,
+  rating,
+}: TestimonialCardProps) {
+  return (
+    <Card className="relative flex flex-col overflow-hidden">
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute select-none"
+        style={{
+          top: "calc(var(--space-4) * -1)",
+          right: "var(--space-3)",
+          fontFamily: "var(--font-display)",
+          fontSize: "clamp(4.5rem, 7vw, 6.5rem)",
+          lineHeight: 0.8,
+          color: "var(--color-marigold)",
+          opacity: 0.16,
+        }}
+      >
+        &rdquo;
+      </span>
+      <div className="relative flex flex-col">
+        {typeof rating === "number" && (
+          <span
+            className="meta-caps"
+            aria-label={`${rating} out of 5`}
+            style={{
+              color: "var(--color-marigold-deep)",
+              marginBottom: "var(--space-3)",
+            }}
+          >
+            {"★".repeat(Math.round(rating))}
+            <span aria-hidden="true" style={{ color: "var(--color-grape-o20)" }}>
+              {"★".repeat(Math.max(0, 5 - Math.round(rating)))}
+            </span>
+          </span>
+        )}
+        <p
+          style={{
+            color: "var(--color-grape)",
+            fontSize: "var(--font-size-text-large)",
+            lineHeight: "var(--line-height-large)",
+            margin: 0,
+            marginBottom: "var(--space-4)",
+          }}
+        >
+          &ldquo;{quote}&rdquo;
+        </p>
+        <p
+          className="meta-caps"
+          style={{ color: "var(--color-grape)", margin: 0 }}
+        >
+          {name}
+        </p>
+        {role && (
+          <p
+            style={{
+              color: "var(--color-grape-soft)",
+              fontSize: "var(--font-size-text-small)",
+              margin: 0,
+              marginTop: "var(--space-1)",
+            }}
+          >
+            {role}
+          </p>
+        )}
+      </div>
+    </Card>
+  );
+}
+
 interface LoveStoryCardProps {
   imageSrc?: string;
   imageAlt?: string;
   couple: string;
   label?: string;
+  href?: string;
 }
 
 /**
@@ -499,6 +585,7 @@ export function LoveStoryCard({
   imageAlt,
   couple,
   label = "View gallery",
+  href,
 }: LoveStoryCardProps) {
   if (!imageSrc) {
     return (
@@ -536,11 +623,8 @@ export function LoveStoryCard({
       </div>
     );
   }
-  return (
-    <div
-      className="card group relative overflow-hidden"
-      style={{ aspectRatio: "3 / 2", padding: 0 }}
-    >
+  const inner = (
+    <>
       <Image
         src={imageSrc}
         alt={imageAlt ?? couple}
@@ -556,10 +640,7 @@ export function LoveStoryCard({
             "linear-gradient(to top, var(--color-grape-fill-o85), transparent)",
         }}
       >
-        <span
-          className="h3"
-          style={{ color: "var(--color-page)", margin: 0 }}
-        >
+        <span className="h3" style={{ color: "var(--color-page)", margin: 0 }}>
           {couple}
         </span>
         <span
@@ -569,6 +650,27 @@ export function LoveStoryCard({
           {label}
         </span>
       </div>
+    </>
+  );
+  const cardStyle: React.CSSProperties = { aspectRatio: "3 / 2", padding: 0 };
+  if (href) {
+    return (
+      <a
+        href={href}
+        className="link-plain card group relative block overflow-hidden"
+        style={cardStyle}
+        aria-label={`${couple}: ${label}`}
+      >
+        {inner}
+      </a>
+    );
+  }
+  return (
+    <div
+      className="card group relative overflow-hidden"
+      style={cardStyle}
+    >
+      {inner}
     </div>
   );
 }

@@ -29,6 +29,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/reviews", priority: 0.6, changeFrequency: "monthly", include: CONTENT_FLAGS.reviewsHaveContent },
     { path: "/blog", priority: 0.6, changeFrequency: "weekly", include: CONTENT_FLAGS.blogHasPosts },
     { path: "/terms", priority: 0.3, changeFrequency: "yearly", include: CONTENT_FLAGS.termsHaveContent },
+    // Refund/Cancellation ships in lockstep with Terms (same gate).
+    { path: "/refund", priority: 0.3, changeFrequency: "yearly", include: CONTENT_FLAGS.termsHaveContent },
     // Privacy ships (or links to the Nexus hosted page); it is indexable.
     { path: "/privacy", priority: 0.3, changeFrequency: "yearly", include: true },
   ];

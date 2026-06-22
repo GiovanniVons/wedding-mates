@@ -263,3 +263,63 @@ export const FAQ_GROUPS: FaqGroup[] = [
 
 /** Flattened FAQ items (every group) for the FAQPage schema on /faq. */
 export const ALL_FAQ_ITEMS: Faq[] = FAQ_GROUPS.flatMap((g) => g.items);
+
+/* ===========================================================================
+ * PROOF CONTENT (testimonials + love-story galleries)
+ *
+ * Both arrays ship EMPTY by design: no rights-cleared quotes or couple photos
+ * exist yet, and we never fabricate proof (per the content-honesty gate). The
+ * render surfaces (reviews page, home Section 8, the gallery route) and the
+ * Review / AggregateRating schema are already wired to read these arrays, so
+ * going live is a one-place DATA EDIT: paste real entries here, then flip the
+ * matching CONTENT_FLAG in src/lib/site.ts (reviewsHaveContent /
+ * loveStoriesHaveRights). No component or route work is needed at fill time.
+ * ======================================================================== */
+
+export interface Testimonial {
+  /** First name (or "Name and Name") -- never invent a surname. */
+  name: string;
+  /** The reviewer's role, e.g. "Bride" or "The mate who led the ceremony". */
+  role?: string;
+  /** The rights-cleared quote, in their words. */
+  quote: string;
+  /** 1-5. Optional; only emitted into AggregateRating when EVERY item has one. */
+  rating?: number;
+}
+
+/**
+ * TESTIMONIALS -- EMPTY until rights-cleared reviews exist. To go live: paste
+ * the approved entries here, then set CONTENT_FLAGS.reviewsHaveContent = true.
+ * The reviews page renders the grid and emits Review schema automatically; if
+ * every entry carries a `rating`, AggregateRating is emitted onto the Product
+ * too (see JsonLd reviewSchema / aggregateRatingSchema).
+ */
+export const TESTIMONIALS: Testimonial[] = [];
+
+export interface LoveStory {
+  /** URL slug for the gallery route, e.g. "kat-and-david". */
+  slug: string;
+  /** Couple display name, e.g. "Kat and David". */
+  couple: string;
+  /** Cover image path under /public; undefined renders the honest empty card. */
+  imageSrc?: string;
+  imageAlt?: string;
+  /** Rights-cleared gallery image paths under /public (for the gallery route). */
+  gallery?: { src: string; alt: string }[];
+  /** One-line caption shown on the gallery page. */
+  caption?: string;
+}
+
+/**
+ * LOVE_STORIES -- EMPTY until photo rights are confirmed (Kat+David,
+ * Kristi+Mark). To go live: paste entries here (with imageSrc + gallery paths),
+ * then set CONTENT_FLAGS.loveStoriesHaveRights = true. Home Section 8, the
+ * reviews page and the /love-stories/[slug] gallery route all read this array,
+ * so no component work is needed at fill time. Without imageSrc, LoveStoryCard
+ * renders its honest "photos coming soon" empty state rather than a faked photo.
+ */
+export const LOVE_STORIES: LoveStory[] = [];
+
+export function getLoveStoryBySlug(slug: string): LoveStory | undefined {
+  return LOVE_STORIES.find((s) => s.slug === slug);
+}
