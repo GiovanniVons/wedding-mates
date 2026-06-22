@@ -46,6 +46,12 @@ export function LessonActions({
     if (busy) return;
     setBusy(true);
     await markComplete(slug);
+    // Invalidate the App Router cache so the just-written completion is reflected
+    // everywhere it is read server-side: the dashboard overview (ring + module
+    // tree + unlock state) and the next lesson's own initial state. Without this,
+    // navigating back to /course serves a stale (prefetched) payload and the
+    // overview appears not to update even though the row persisted.
+    router.refresh();
     // Advance: next lesson, or back to the dashboard on the final module.
     if (next) {
       router.push(`/course/${next}`);
