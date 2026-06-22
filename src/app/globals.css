@@ -1,0 +1,447 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+/* ═══════════════════════════════════════════════════════════════
+   TAILWIND CSS 4 INTEGRATION
+   Registers the token subset Tailwind needs so utilities resolve.
+   Unregistered colours silently fail with opacity modifiers, so any
+   colour used as bg-X/NN or text-X/NN is registered here.
+   (Layer 2 of the Token System; see CLAUDE.md Token System Canonical.)
+   ═══════════════════════════════════════════════════════════════ */
+@theme inline {
+  /* ── Raw palette (registered so opacity modifiers like text-grape/70 work) ── */
+  --color-page: var(--color-page);
+  --color-page-tint: var(--color-page-tint);
+  --color-grape: var(--color-grape);
+  --color-grape-soft: var(--color-grape-soft);
+  --color-coral: var(--color-coral);
+  --color-coral-deep: var(--color-coral-deep);
+  --color-marigold: var(--color-marigold);
+  --color-marigold-deep: var(--color-marigold-deep);
+  --color-mint: var(--color-mint);
+  --color-mint-deep: var(--color-mint-deep);
+
+  /* ── Semantic theme colours ── */
+  --color-bg: var(--theme-bg);
+  --color-bg-2: var(--theme-bg-2);
+  --color-text: var(--theme-text);
+  --color-text-muted: var(--theme-text-muted);
+  --color-heading-accent: var(--theme-heading-accent);
+  --color-border: var(--theme-border);
+
+  /* ── Button bridge colours ── */
+  --color-btn-primary-bg: var(--btn-primary-bg);
+  --color-btn-primary-text: var(--btn-primary-text);
+  --color-btn-secondary-text: var(--btn-secondary-text);
+  --color-btn-success-bg: var(--btn-success-bg);
+
+  /* ── Fonts ── */
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+
+  /* ── Font sizes ── */
+  --font-size-sm: var(--font-size-text-small);
+  --font-size-base: var(--font-size-text-main);
+  --font-size-lg: var(--font-size-text-large);
+
+  /* ── Spacing (token-mapped; lets gap-N / p-N resolve to fluid tokens) ── */
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-7: var(--space-7);
+  --spacing-8: var(--space-8);
+
+  /* ── Radii ── */
+  --radius-sm: var(--radius-small);
+  --radius: var(--radius-main);
+  --radius-full: var(--radius-round);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENT-CLASS LAYER
+   Pseudo-selectors (:hover, :focus-visible, :active) that inline
+   style={{}} cannot express. Token var() references only.
+   ═══════════════════════════════════════════════════════════════ */
+@layer components {
+
+  /* ── Skip-to-content link ── */
+  .skip-link {
+    position: absolute;
+    left: var(--space-3);
+    top: var(--space-3);
+    z-index: 200;
+    transform: translateY(-150%);
+    padding: var(--space-2) var(--space-4);
+    background-color: var(--color-grape);
+    color: var(--color-page);
+    border-radius: var(--radius-small);
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-heavy);
+    text-decoration: none;
+    transition: transform var(--motion-duration-fast) ease;
+  }
+  .skip-link:focus {
+    transform: translateY(0);
+    outline: var(--focus-width) solid var(--color-marigold);
+    outline-offset: var(--focus-offset-outer);
+  }
+
+  /* ── Button base (scopes label colour OFF anchors so the link rule never
+       overrides a primary CTA label -- recurring bug, see frontend-dev lessons) ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-family: var(--btn-font);
+    font-weight: var(--btn-font-weight);
+    letter-spacing: var(--btn-letter-spacing);
+    text-transform: var(--btn-text-transform);
+    border-radius: var(--btn-radius);
+    border-style: solid;
+    border-width: var(--btn-border-width);
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--motion-duration-fast) ease,
+                color var(--motion-duration-fast) ease,
+                border-color var(--motion-duration-fast) ease,
+                transform var(--motion-duration-fast) ease,
+                box-shadow var(--motion-duration-fast) ease;
+  }
+  /* Anchor-based buttons opt out of the in-prose link underline + colour. */
+  a.btn { font-weight: var(--btn-font-weight); text-decoration: none; }
+  a.btn:hover { text-decoration: none; }
+
+  .btn-icon {
+    display: inline-flex;
+    transition: transform var(--motion-duration-fast) ease;
+  }
+  .btn:hover .btn-icon { transform: translateX(var(--space-1)); }
+
+  /* ── Primary (grape label on coral fill) ── */
+  .btn-primary {
+    background-color: var(--btn-primary-bg);
+    border-color: var(--btn-primary-border);
+    color: var(--btn-primary-text);
+  }
+  .btn-primary:not(:disabled):hover {
+    background-color: var(--btn-primary-bg-hover);
+    border-color: var(--btn-primary-border-hover);
+    color: var(--btn-primary-text-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 var(--color-grape-o08);
+  }
+  .btn-primary:not(:disabled):active {
+    background-color: var(--btn-primary-bg-active);
+    color: var(--btn-primary-text-active);
+    transform: translateY(0);
+    box-shadow: none;
+  }
+  .btn-primary:disabled {
+    background-color: var(--btn-primary-bg-disabled);
+    border-color: var(--btn-primary-bg-disabled);
+    color: var(--btn-primary-text-disabled);
+  }
+
+  /* ── Display CTA (white label on coral, hero only, >=18px bold) ── */
+  .btn-display {
+    background-color: var(--btn-display-bg);
+    border-color: var(--btn-display-bg);
+    color: var(--btn-display-text);
+  }
+  .btn-display:not(:disabled):hover {
+    background-color: var(--btn-display-bg-hover);
+    color: var(--btn-display-text-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 var(--color-grape-o08);
+  }
+  .btn-display:not(:disabled):active { transform: translateY(0); box-shadow: none; }
+
+  /* ── Secondary (grape outline, fills to grape on hover) ── */
+  .btn-secondary {
+    background-color: var(--btn-secondary-bg);
+    border-color: var(--btn-secondary-border);
+    color: var(--btn-secondary-text);
+  }
+  .btn-secondary:not(:disabled):hover {
+    background-color: var(--btn-secondary-bg-hover);
+    border-color: var(--btn-secondary-border-hover);
+    color: var(--btn-secondary-text-hover);
+  }
+
+  /* ── Tertiary / text-link button (coral-deep text + styled underline) ── */
+  .btn-tertiary {
+    background-color: var(--btn-tertiary-bg);
+    border-color: var(--btn-tertiary-border);
+    color: var(--btn-tertiary-text);
+    text-decoration: underline;
+    text-decoration-color: var(--btn-tertiary-text);
+    text-decoration-thickness: var(--link-thickness);
+    text-underline-offset: var(--link-offset);
+  }
+  .btn-tertiary:not(:disabled):hover {
+    background-color: var(--btn-tertiary-bg-hover);
+    color: var(--btn-tertiary-text-hover);
+    text-decoration-thickness: var(--link-thickness-hover);
+  }
+
+  /* ── Success (mint, course completion only) ── */
+  .btn-success {
+    background-color: var(--btn-success-bg);
+    border-color: var(--btn-success-border);
+    color: var(--btn-success-text);
+  }
+  .btn-success:not(:disabled):hover {
+    background-color: var(--btn-success-bg-hover);
+    color: var(--btn-success-text-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 var(--color-grape-o08);
+  }
+  .btn-success:not(:disabled):active { transform: translateY(0); box-shadow: none; }
+
+  /* ── Card (flat risograph; hover lift only when .card-interactive) ── */
+  .card {
+    background-color: var(--card-bg);
+    border: var(--card-border-width) solid var(--card-border);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    transition: transform var(--motion-duration-fast) ease,
+                box-shadow var(--motion-duration-fast) ease;
+  }
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .card-interactive:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--card-shadow-hover);
+    }
+  }
+
+  /* ── Form inputs ── */
+  .field-input,
+  .field-textarea,
+  .field-select {
+    width: 100%;
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border: var(--card-border-width) solid var(--input-border);
+    border-radius: var(--input-radius);
+    padding-inline: var(--input-padding-x);
+    font-family: var(--font-body);
+    font-size: var(--font-size-text-main);
+    transition: border-color var(--motion-duration-fast) ease,
+                box-shadow var(--motion-duration-fast) ease;
+  }
+  .field-input,
+  .field-select { height: var(--input-height); }
+  .field-textarea { min-height: 7rem; padding-block: var(--space-3); resize: vertical; }
+  .field-input::placeholder,
+  .field-textarea::placeholder { color: var(--input-placeholder); opacity: 1; }
+  .field-input:focus-visible,
+  .field-textarea:focus-visible,
+  .field-select:focus-visible {
+    outline: none;
+    border-color: var(--input-border-focus);
+    box-shadow: 0 0 0 3px var(--input-ring-focus);
+  }
+  .field-input[data-error="true"],
+  .field-textarea[data-error="true"],
+  .field-select[data-error="true"] {
+    border-color: var(--input-border-error);
+  }
+  .field-input:disabled,
+  .field-textarea:disabled,
+  .field-select:disabled {
+    opacity: 0.5;
+    background-color: var(--color-page-tint);
+    cursor: not-allowed;
+  }
+
+  /* ── Radio / checkbox styled box (peer reacts to the sr-only input) ── */
+  .choice-box {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: var(--border-width-main) solid var(--color-grape);
+    background-color: var(--toggle-bg);
+    transition: background-color var(--motion-duration-fast) ease,
+                border-color var(--motion-duration-fast) ease;
+  }
+  .choice-box[data-shape="radio"] { border-radius: var(--radius-round); }
+  .choice-box[data-shape="checkbox"] { border-radius: var(--radius-small); }
+  .choice-tick {
+    opacity: 0;
+    transition: opacity var(--motion-duration-fast) ease;
+  }
+  .peer:checked ~ .choice-box {
+    background-color: var(--toggle-check-bg);
+    border-color: var(--color-mint-deep);
+  }
+  .peer:checked ~ .choice-box .choice-tick { opacity: 1; }
+  .peer:focus-visible ~ .choice-box {
+    outline: var(--focus-width) solid var(--color-grape);
+    outline-offset: var(--focus-offset-outer);
+  }
+
+  /* ── Nav link (two cues: colour + styled underline on active/hover) ── */
+  .nav-link {
+    color: var(--header-text);
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    position: relative;
+    transition: color var(--motion-duration-fast) ease;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.35em;
+    height: var(--link-thickness-hover);
+    background-color: var(--nav-link-active);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--motion-duration-fast) ease;
+  }
+  .nav-link:hover { color: var(--nav-link-active); }
+  .nav-link:hover::after,
+  .nav-link[aria-current="page"]::after { transform: scaleX(1); }
+  .nav-link[aria-current="page"] { color: var(--nav-link-active); }
+
+  /* ── Drawer link (page-white on the grape drawer field) ── */
+  .drawer-link {
+    color: var(--nav-drawer-text);
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-snug);
+    text-decoration: none;
+    transition: color var(--motion-duration-fast) ease;
+  }
+  .drawer-link:hover { color: var(--color-marigold); }
+
+  /* ── Accordion trigger glyph rotation ── */
+  .accordion-glyph {
+    transition: transform var(--motion-duration-base) ease;
+  }
+  .accordion-trigger[aria-expanded="true"] .accordion-glyph {
+    transform: rotate(45deg);
+  }
+
+  /* ── Sticky mobile CTA bar layout ──
+     Flex layout + fixed positioning live here (NOT inline) so the unlayered
+     `lg:hidden` utility (display:none) can override at >=1024px. An inline
+     `display` value would beat lg:hidden and leak the mobile bar onto desktop. */
+  .sticky-cta-bar {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-inline: var(--site-margin);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COURSE MARKDOWN RHYTHM (.prose-course element styles)
+   UNLAYERED, matching the unlayered `.prose-course` base in tokens.css Zone 5,
+   so these win against Tailwind preflight without an @layer specificity tie.
+
+   The lesson body is react-markdown output (raw <h2>/<h3>/<p>/<ul>/<blockquote>
+   /<strong>). Without these rules the rendered headings carry default margins
+   that COLLAPSE against the preceding paragraph and overlap the body text. The
+   2.5-rhythm tokens (--gap-* and --space-*) give every heading its breathing
+   room above and a fixed --gap-title-body below, so a subhead never touches the
+   paragraph under it. Calm register: even, predictable steps. No JS, no overlap.
+   ═══════════════════════════════════════════════════════════════ */
+.prose-course > :first-child {
+  margin-top: 0;
+}
+.prose-course p {
+  margin-block: 0 var(--gap-body-stack);
+  color: var(--color-grape-soft);
+}
+.prose-course h2 {
+  font-family: var(--font-heavy);
+  font-size: var(--font-size-h4);
+  font-weight: var(--font-weight-black);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-normal);
+  color: var(--color-grape);
+  /* Generous breath ABOVE the subhead, fixed small gap to the body BELOW it. */
+  margin-top: var(--space-7);
+  margin-bottom: var(--gap-title-body);
+}
+.prose-course h3 {
+  font-family: var(--font-body);
+  font-size: var(--font-size-h5);
+  font-weight: var(--font-weight-heavy);
+  line-height: var(--line-height-medium);
+  letter-spacing: var(--letter-spacing-normal);
+  color: var(--color-grape);
+  margin-top: var(--space-6);
+  margin-bottom: var(--gap-title-body);
+}
+.prose-course h4 {
+  font-family: var(--font-body);
+  font-size: var(--font-size-text-large);
+  font-weight: var(--font-weight-heavy);
+  line-height: var(--line-height-medium);
+  color: var(--color-grape);
+  margin-top: var(--space-5);
+  margin-bottom: var(--gap-title-body);
+}
+.prose-course ul,
+.prose-course ol {
+  margin-block: 0 var(--gap-body-stack);
+  padding-inline-start: var(--space-5);
+  color: var(--color-grape-soft);
+}
+.prose-course ul { list-style: disc; }
+.prose-course ol { list-style: decimal; }
+.prose-course li {
+  margin-block: 0 var(--gap-list-item);
+  padding-inline-start: var(--space-1);
+}
+.prose-course li::marker {
+  color: var(--color-coral);
+}
+.prose-course li:last-child {
+  margin-bottom: 0;
+}
+.prose-course strong {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-grape);
+}
+.prose-course em {
+  font-style: italic;
+}
+.prose-course blockquote {
+  margin-block: var(--space-6);
+  padding-inline: var(--space-5);
+  padding-block: var(--space-4);
+  border-inline-start: var(--border-width-bold) solid var(--color-coral);
+  background-color: var(--color-field-coral);
+  border-radius: var(--radius-small);
+  color: var(--color-grape);
+  font-family: var(--font-display);
+  font-size: var(--font-size-h5);
+  line-height: var(--line-height-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-snug);
+}
+.prose-course blockquote p { margin: 0; color: inherit; }
+.prose-course hr {
+  margin-block: var(--space-6);
+  border: 0;
+  border-top: var(--border-width-main) solid var(--color-grape-o12);
+}

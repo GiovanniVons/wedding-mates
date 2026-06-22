@@ -1,0 +1,1075 @@
+/*
+ * ═══════════════════════════════════════════════════════════════
+ * WEDDING MATES -- "Recessional Pop" DESIGN TOKENS
+ * Phase 2 / ui-designer / 2026-06-21 / draft
+ * Next.js 16 + React 19 + Tailwind CSS 4
+ * ═══════════════════════════════════════════════════════════════
+ *
+ * AESTHETIC: flat saturated screen-printed celebration anchored by a
+ * structural grape-ink. Built-in DUAL REGISTER: the same family, grid,
+ * palette and cue chip dial from LOUD (marketing, the kiss/confirmation
+ * beat) to CALM (the 7-step booking wizard, the gated course, auth) by
+ * changing ONLY scale, saturation and motion -- never identity.
+ *
+ * SURFACE MODE is carried on data-surface (NOT data-theme, which carries
+ * dark/grape inversion). The two compose:
+ *   data-surface="loud"   poster scale, full saturated fields, bursts allowed
+ *   data-surface="calm"   reading scale, near-white only, accent rationed
+ *                         to the cue chip + the one primary button, no bursts
+ * data-theme carries the colour inversion of a section:
+ *   (default)             page surface (#FBFAFF), grape text
+ *   data-theme="tint"     page-tint alt section (#F2EEFB), grape text
+ *   data-theme="grape"    loud dark beat / footer (#2A1840), page text
+ *   data-theme="coral"    loud coral band (#F2484E), grape/white text
+ *
+ * STYLING BOUNDARY (all agents follow): Tailwind for layout structure
+ * only; token var() for every visual property; rgba() is BANNED, use
+ * Zone 1b color-mix() variants. Section vertical padding is always
+ * var(--section-space-*).
+ *
+ * FLUID SCALE FORMULA
+ *   viewport range: 20rem (320px) to 90rem (1440px)
+ *   clamp(MINrem, calc(INTERCEPT rem + SLOPE * 100vw), MAXrem)
+ *   slope = (MAX - MIN) / 70 ;  intercept = MIN - slope * 20
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ZONE 1: PROJECT PRIMITIVES (Zone 1a)
+   Raw palette, fonts, weights, radii, sizes. CANONICAL NAMES.
+   Source of the palette: confetti and streamers thrown at a wedding
+   recessional, anchored by a deep celebratory grape-ink.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+
+  /* ── Viewport bounds (drive all fluid scaling) ── */
+  --vp-min: 20;
+  --vp-max: 90;
+
+
+  /* ── Color primitives ──
+     Named for their confetti origin. Never pure black / never pure white:
+     darkest is grape-ink #2A1840, lightest is confetti-paper #FBFAFF.
+     -deep variants are the pre-computed AA-safe text colours for each
+     saturated accent on the light surface (carried from brand-guidelines
+     contrast table). Use the -deep variant for any accent rendered AS TEXT
+     at body size; use the bright variant only as a FILL or as a display-scale
+     hit word (>=44px). */
+
+  /* Neutrals (surfaces) */
+  --color-page:        #FBFAFF;  /* confetti-paper white, the bright sky -- dominant ~50% */
+  --color-page-tint:   #F2EEFB;  /* page, faint grape tint -- alt sections */
+
+  /* Grape-ink (structural anchor) */
+  --color-grape:       #2A1840;  /* headlines, loud dark beats, footer, primary text */
+  --color-grape-soft:  #3D2A55;  /* long-form body text on the page surface */
+
+  /* Coral-red (primary accent: CTA, hit word, the kiss beat) */
+  --color-coral:       #F2484E;  /* bright fill + display hit word only */
+  --color-coral-deep:  #C9242A;  /* coral-AS-TEXT on light, hover/active fill */
+
+  /* Marigold (secondary accent: cue chips, highlights, the joy burst) */
+  --color-marigold:      #F6A623;  /* fill / chip background / burst only */
+  --color-marigold-deep: #A66A05;  /* marigold-AS-TEXT on light */
+
+  /* Mint (tertiary accent: progress, reassurance ticks, calm chip) */
+  --color-mint:        #3FB39A;  /* fill / tick / progress only */
+  --color-mint-deep:   #1F7A66;  /* mint-AS-TEXT on light (success text, calm chip) */
+
+  /* Canonical neutral aliases so template-driven downstream zones resolve.
+     Wedding Mates maps light-* to the page surfaces and dark-100 to grape. */
+  --color-light-000:   #FFFFFF;
+  --color-light-100:   var(--color-page);
+  --color-200:         var(--color-page-tint);
+  --color-light-200:   var(--color-page-tint);
+  --color-dark-100:    var(--color-grape);
+
+  /* Primary readable text colour alias */
+  --color-brand-text:  var(--color-grape);
+
+
+  /* ── Font families ──
+     Anton (single heavy condensed grotesque) carries every Hype Line, the
+     hero, big celebration beats, and the pricing numeral. Archivo Black is
+     the heavier-body alternate where Anton is too condensed. Archivo
+     (variable) is the workhorse for everything that is not a Hype Line.
+     NO serif, NO mono anywhere. Variables set by next/font in layout.tsx. */
+  --font-display: var(--font-anton, 'Anton', 'Oswald', 'Arial Narrow', system-ui, sans-serif);
+  --font-heavy:   var(--font-archivo-black, 'Archivo Black', 'Anton', system-ui, sans-serif);
+  --font-body:    var(--font-archivo, 'Archivo', 'Inter', 'Helvetica Neue', system-ui, sans-serif);
+
+  /* Template-canonical aliases (downstream zones reference primary/secondary) */
+  --font-primary:   var(--font-body);    /* body / UI workhorse */
+  --font-secondary: var(--font-display); /* Hype Lines + display headings */
+
+
+  /* ── Font weights ──
+     Anton ships a single weight (400 = ultra-heavy by design). Archivo
+     Black is a fixed 900. Archivo variable carries 400/500/600/700/800. */
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+  --font-weight-heavy:    800;
+  --font-weight-black:    900;
+
+
+  /* ── Font trim ──
+     Anton sits low with tall caps; tuned tighter than the template default.
+     The trim is now SCOPED to display headings only (Zone 5): on body text and
+     Archivo sub-headings the negative-lh trim over-pulled the following element
+     and collapsed multi-line heading -> body pairs into an overlap. Body keeps
+     a gentle trim; display keeps the tight Anton trim. */
+  --font-trim-top:    0.18em;  /* body / Archivo: gentle, never over-pulls */
+  --font-trim-bottom: 0.18em;
+  --font-trim-display-top:    0.30em;  /* Anton display headings only */
+  --font-trim-display-bottom: 0.30em;
+
+
+  /* ── Letter spacing ──
+     Anton is set tight at display scale (poster logic). Tracked all-caps is
+     used only on the cue chip and small meta labels. */
+  --letter-spacing-tight:  -0.01em;   /* Hero Hype Line */
+  --letter-spacing-snug:   -0.005em;  /* Section Hype Line */
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide:   0.06em;    /* small meta caps */
+  --letter-spacing-wider:  0.1em;     /* cue chip caps */
+
+
+  /* ── Line height ──
+     Hype Lines are stacked tight (poster). Long-form course copy runs open. */
+  --line-height-small:   0.92;  /* Hero Hype Line */
+  --line-height-snug:    0.96;  /* Section Hype Line */
+  --line-height-tight:   1.0;   /* H1 calm, H2 */
+  --line-height-medium:  1.15;  /* H3 */
+  --line-height-relaxed: 1.4;   /* small / meta */
+  --line-height-large:   1.55;  /* body large (intros) */
+  --line-height-huge:    1.7;   /* long-form course body */
+
+
+  /* ── Border radius ──
+     POSTER radius. Cue chips + the primary button are full pills (confident
+     solid shapes). Cards + inputs use a clean 10px. The held-page photo uses
+     a slightly larger 14px. NOT soft 2-3rem pillows, NOT 2-4px paper corners. */
+  --radius-small: 0.625rem;  /* 10px -- cards, inputs, toggle cards */
+  --radius-main:  0.875rem;  /* 14px -- image fields, larger panels */
+  --radius-round: 9999px;    /* pill -- cue chips, primary button, tags */
+
+
+  /* ── Border width ──
+     Bolder than the template default; poster system wants visible structure. */
+  --border-width-main:  0.125rem;  /* 2px */
+  --border-width-bold:  0.1875rem; /* 3px -- emphasised dividers, focus on dark */
+
+
+  /* ── Focus ring ── */
+  --focus-width:        0.1875rem; /* 3px -- bold, poster-visible */
+  --focus-offset-inner: calc(var(--focus-width) * -1);
+  --focus-offset-outer: 0.1875rem; /* 3px */
+
+
+  /* ── Container max-widths ── */
+  --max-width-read:  39rem;   /* 624px -- course reading column, ~60-70ch at 17px */
+  --max-width-form:  40rem;   /* 640px -- booking wizard column */
+  --max-width-small: 50rem;   /* 800px -- narrow editorial */
+  --max-width-main:  78rem;   /* 1248px -- marketing default container */
+  --max-width-wide:  90rem;   /* 1440px -- full-bleed bound */
+  --max-width-full:  100%;
+
+
+  /* ── Course sidebar ── */
+  --course-sidebar-width: 17.5rem; /* 280px persistent left rail (desktop) */
+
+
+  /* ── Button sizes (min-heights -- all >=44px touch) ── */
+  --btn-size-small:  2.75rem;  /* 44px -- inline / utility */
+  --btn-size-medium: 3.25rem;  /* 52px -- default */
+  --btn-size-large:  3.75rem;  /* 60px -- hero / pay / primary marketing CTA */
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ZONE 1b: DERIVED OPACITY VARIANTS
+   color-mix() only. NO rgba() anywhere.
+   Naming: --color-{primitive}-o{percent}
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Grape (text/ink) at reduced opacity -- borders, muted text, scrims ── */
+  --color-grape-o08: color-mix(in srgb, var(--color-grape) 8%,  transparent);
+  --color-grape-o12: color-mix(in srgb, var(--color-grape) 12%, transparent);
+  --color-grape-o20: color-mix(in srgb, var(--color-grape) 20%, transparent);
+  --color-grape-o40: color-mix(in srgb, var(--color-grape) 40%, transparent);
+  --color-grape-o60: color-mix(in srgb, var(--color-grape) 60%, transparent);
+  --color-grape-o80: color-mix(in srgb, var(--color-grape) 80%, transparent);
+
+  /* ── Page surface at reduced opacity -- glass header, overlays ── */
+  --color-page-o20: color-mix(in srgb, var(--color-page) 20%, transparent);
+  --color-page-o50: color-mix(in srgb, var(--color-page) 50%, transparent);
+  --color-page-o80: color-mix(in srgb, var(--color-page) 80%, transparent);
+  --color-page-o92: color-mix(in srgb, var(--color-page) 92%, transparent);
+
+  /* ── Grape surface at reduced opacity -- dark-section scrims, lightbox ── */
+  --color-grape-fill-o30: color-mix(in srgb, var(--color-grape) 30%, transparent);
+  --color-grape-fill-o50: color-mix(in srgb, var(--color-grape) 50%, transparent);
+  --color-grape-fill-o70: color-mix(in srgb, var(--color-grape) 70%, transparent);
+  --color-grape-fill-o85: color-mix(in srgb, var(--color-grape) 85%, transparent);
+
+  /* ── Accent tints (flat-ink "lighter pass" fields + focus halos) ── */
+  --color-coral-o12:    color-mix(in srgb, var(--color-coral) 12%, transparent);
+  --color-coral-o40:    color-mix(in srgb, var(--color-coral) 40%, transparent);
+  --color-marigold-o15: color-mix(in srgb, var(--color-marigold) 15%, transparent);
+  --color-marigold-o30: color-mix(in srgb, var(--color-marigold) 30%, transparent);
+  --color-mint-o15:     color-mix(in srgb, var(--color-mint) 15%, transparent);
+  --color-mint-o30:     color-mix(in srgb, var(--color-mint) 30%, transparent);
+
+  /* ── Page text on grape (inverted) at reduced opacity -- muted text on dark ── */
+  --color-page-on-grape-o70: color-mix(in srgb, var(--color-page) 70%, var(--color-grape));
+  --color-page-on-grape-o55: color-mix(in srgb, var(--color-page) 55%, var(--color-grape));
+
+  /* ── Flat-ink tinted fields (risograph "second pass" panels, NO gradient) ── */
+  --color-field-tint:     var(--color-page-tint);
+  --color-field-mint:     color-mix(in srgb, var(--color-mint) 14%, var(--color-page));
+  --color-field-marigold: color-mix(in srgb, var(--color-marigold) 14%, var(--color-page));
+  --color-field-coral:    color-mix(in srgb, var(--color-coral) 10%, var(--color-page));
+
+  /* ── Shadow base colours (used sparingly: flat brand, only on calm cards) ── */
+  --shadow-color-soft:   color-mix(in srgb, var(--color-grape) 7%,  transparent);
+  --shadow-color-medium: color-mix(in srgb, var(--color-grape) 12%, transparent);
+  --shadow-color-coral:  color-mix(in srgb, var(--color-coral) 28%, transparent);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ZONE 2: FLUID SCALE + MOTION
+   Type scale tuned for Anton (poster jumps hard) + Archivo (reads at 17px).
+   Recalculate only if you change a MIN/MAX pair.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+
+  /* ── Font sizes ──
+     Hype Lines jump scale hard for poster contrast; reading sizes stay calm. */
+  /* hero-hype:   4.5  → 8     (72-128px) */  --font-size-display:    clamp(4.5rem,   calc(3.5rem + 5vw), 8rem);
+  /* section-hype:2.75 → 4.5   (44-72px)  */  --font-size-hype:       clamp(2.75rem,  calc(2.25rem + 2.5vw), 4.5rem);
+  /* h1 (calm):   2.5  → 3.25  (40-52px)  */  --font-size-h1:         clamp(2.5rem,   calc(2.2857rem + 1.0714vw), 3.25rem);
+  /* h2:          1.875→ 2.125 (30-34px)  */  --font-size-h2:         clamp(1.875rem, calc(1.8036rem + 0.3571vw), 2.125rem);
+  /* h3:          1.375→ 1.5   (22-24px)  */  --font-size-h3:         clamp(1.375rem, calc(1.3393rem + 0.1786vw), 1.5rem);
+  /* h6:          1    → 1.125 (16-18px)  */  --font-size-h6:         clamp(1rem,     calc(0.9643rem + 0.1786vw), 1.125rem);
+  /* body-large:  1.125→ 1.1875(18-19px)  */  --font-size-text-large: clamp(1.125rem, calc(1.1071rem + 0.0893vw), 1.1875rem);
+  /* body:        1    → 1.0625(16-17px)  */  --font-size-text-main:  clamp(1rem,     calc(0.9821rem + 0.0893vw), 1.0625rem);
+  /* small/meta:  0.8125→0.875 (13-14px)  */  --font-size-text-small: clamp(0.8125rem,calc(0.7946rem + 0.0893vw), 0.875rem);
+  /* cue chip:    0.75 → 0.8125(12-13px)  */  --font-size-chip:       clamp(0.75rem,  calc(0.7321rem + 0.0893vw), 0.8125rem);
+
+  /* Map H4/H5 to body-scale Archivo headings (rarely used; keep for cascade) */
+  --font-size-h4: var(--font-size-h3);
+  --font-size-h5: var(--font-size-text-large);
+
+
+  /* ── Spacing scale ── */
+  /* 1:  0.375 → 0.625 */  --space-1: clamp(0.375rem, calc(0.3036rem + 0.3571vw), 0.625rem);
+  /* 2:  0.625 → 0.875 */  --space-2: clamp(0.625rem, calc(0.5536rem + 0.3571vw), 0.875rem);
+  /* 3:  0.875 → 1.25  */  --space-3: clamp(0.875rem, calc(0.7679rem + 0.5357vw), 1.25rem);
+  /* 4:  1.25  → 1.75  */  --space-4: clamp(1.25rem,  calc(1.1071rem + 0.7143vw), 1.75rem);
+  /* 5:  1.75  → 2.5   */  --space-5: clamp(1.75rem,  calc(1.5357rem + 1.0714vw), 2.5rem);
+  /* 6:  2     → 2.5   */  --space-6: clamp(2rem,     calc(1.8571rem + 0.7143vw), 2.5rem);
+  /* 7:  2.25  → 3     */  --space-7: clamp(2.25rem,  calc(2.0357rem + 1.0714vw), 3rem);
+  /* 8:  2.5   → 4     */  --space-8: clamp(2.5rem,   calc(2.0714rem + 2.1429vw), 4rem);
+
+
+  /* ── Section spacing ──
+     Loud rhythm VARIES (tight stack, then a big breath before a Hype peak).
+     Calm rhythm uses even, predictable steps. The variance lives in WHICH
+     token each section picks, not in new tokens. */
+  --section-space-none:     0px;
+  /* small:  3   → 5   */  --section-space-small:    clamp(3rem,   calc(2.4286rem + 2.8571vw), 5rem);
+  /* main:   4   → 7   */  --section-space-main:     clamp(4rem,   calc(3.1429rem + 4.2857vw), 7rem);
+  /* large:  5.5 → 10  */  --section-space-large:    clamp(5.5rem, calc(4.2143rem + 6.4286vw), 10rem);
+  /* top:    6.5 → 9   */  --section-space-page-top: clamp(6.5rem,  calc(5.7857rem + 3.5714vw), 9rem);
+
+
+  /* ── Site layout ── */
+  /* margin: 1.25 → 3 */  --site-margin: clamp(1.25rem, calc(0.75rem + 2.5vw), 3rem);
+  /* gutter: 1 → 2    */  --site-gutter: clamp(1rem,    calc(0.7143rem + 1.4286vw), 2rem);
+
+
+  /* ── Vertical rhythm tokens (the consistent gaps inside any composition) ──
+     Use these everywhere a heading precedes body text, or items stack inside a
+     card, instead of ad-hoc margin:0 + mt-[...]. They keep every heading->body
+     pair and every internal list balanced and token-driven. */
+  --gap-title-body:   var(--space-3);  /* card/section heading -> its description */
+  --gap-eyebrow-title: var(--space-2); /* chip/eyebrow -> heading below it */
+  --gap-list-item:    var(--space-3);  /* between stacked list items (ticks, rows) */
+  --gap-body-stack:   var(--space-4);  /* between stacked paragraphs / blocks */
+
+
+  /* ── Motion (MOTION_INTENSITY 6) ──
+     Present, choreographed, celebration-timed. Calm surfaces drop to
+     near-zero via the data-surface="calm" override below. */
+  --motion-duration-fast: 0.2s;    /* hover, focus, toggle, chip pop */
+  --motion-duration-base: 0.35s;   /* entrances, accordion, running-total tick */
+  --motion-duration-slow: 0.6s;    /* hero Hype Line reveal sequence */
+  --motion-easing:      cubic-bezier(0.25, 0.1, 0.25, 1);   /* default ease */
+  --motion-easing-pop:  cubic-bezier(0.34, 1.56, 0.64, 1);  /* chip pop / snap-in overshoot */
+
+  /* Confetti burst (rationed: hero peak, confirmation, the kiss line only) */
+  --burst-duration: 0.9s;
+  --burst-particle-count: 18;
+}
+
+/* Calm register drops motion to near-zero (wizard, course, auth). */
+[data-surface="calm"] {
+  --motion-duration-fast: 0.15s;
+  --motion-duration-base: 0.22s;
+  --motion-duration-slow: 0.3s;
+  --motion-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* prefers-reduced-motion collapses every reveal to instant and kills bursts. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-fast: 0.01ms;
+    --motion-duration-base: 0.01ms;
+    --motion-duration-slow: 0.01ms;
+    --burst-duration: 0ms;
+    --burst-particle-count: 0;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ZONE 3: SEMANTIC THEME (Zone 3a)
+   data-theme carries SURFACE COLOUR INVERSION per section.
+   (default)        page surface, grape text
+   tint             page-tint alt section
+   grape            loud dark beat / footer (inverted)
+   coral            loud coral band
+   WARNING: on elements that SET data-theme, use Zone 1 primitives for
+   bg/text, not semantic vars (semantic vars flip in that subtree).
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Base: page surface (light) ── */
+:root {
+  --theme-bg:             var(--color-page);
+  --theme-bg-2:           var(--color-page-tint);
+  --theme-bg-3:           var(--color-page-tint);
+
+  --theme-text:           var(--color-grape);
+  --theme-text-muted:     var(--color-grape-soft);
+  --theme-heading:        var(--color-grape);
+  --theme-heading-accent: var(--color-coral-deep);  /* hit-word at body scale */
+
+  --theme-border:         var(--color-grape-o20);
+  --theme-border-strong:  var(--color-grape);
+
+  --theme-selection-bg:   var(--color-marigold);
+  --theme-selection-text: var(--color-grape);
+
+  /* Surface-mode default = loud on marketing; pages may set data-surface. */
+  --surface-burst-allowed: 1;
+}
+
+/* ── Tint alt section ── */
+[data-theme="tint"] {
+  --theme-bg:             var(--color-page-tint);
+  --theme-bg-2:           var(--color-page);
+  --theme-text:           var(--color-grape);
+  --theme-text-muted:     var(--color-grape-soft);
+  --theme-heading:        var(--color-grape);
+  --theme-heading-accent: var(--color-coral-deep);
+  --theme-border:         var(--color-grape-o20);
+}
+
+/* ── Grape: loud dark beat / footer (inverted) ── */
+[data-theme="grape"] {
+  --theme-bg:             var(--color-grape);
+  --theme-bg-2:           color-mix(in srgb, var(--color-page) 8%, var(--color-grape));
+  --theme-text:           var(--color-page);
+  --theme-text-muted:     var(--color-page-on-grape-o70);
+  --theme-heading:        var(--color-page);
+  --theme-heading-accent: var(--color-coral);   /* coral hit word stays loud on dark */
+  --theme-border:         color-mix(in srgb, var(--color-page) 22%, transparent);
+  --theme-border-strong:  var(--color-page);
+  --theme-selection-bg:   var(--color-coral);
+  --theme-selection-text: var(--color-page);
+}
+
+/* ── Coral: loud accent band (rationed: hero peak, final CTA) ── */
+[data-theme="coral"] {
+  --theme-bg:             var(--color-coral);
+  --theme-bg-2:           var(--color-coral-deep);
+  --theme-text:           var(--color-page);
+  --theme-text-muted:     color-mix(in srgb, var(--color-page) 80%, var(--color-coral));
+  --theme-heading:        var(--color-page);
+  --theme-heading-accent: var(--color-grape);   /* grape hit word on coral, 4.5:1 */
+  --theme-border:         color-mix(in srgb, var(--color-page) 30%, transparent);
+  --theme-border-strong:  var(--color-page);
+  --theme-selection-bg:   var(--color-grape);
+  --theme-selection-text: var(--color-page);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ZONE 3b: COMPONENT BRIDGE
+   header, container, card, input, overlay + project-specific
+   (cue chip, stepper, running-total bar, progress ring, course shell).
+   Reference Zone 1/1b/3 only -- no hardcoded hex.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Header (smart, transparent-to-solid) ── */
+  --header-bg:              transparent;
+  --header-bg-scrolled:     var(--color-page-o92);
+  --header-text:            var(--theme-text);
+  --header-text-scrolled:   var(--color-grape);
+  --header-border-scrolled: var(--color-grape-o12);
+  --header-blur:            14px;
+  --header-height:          5rem;
+  --header-height-scrolled: 4rem;
+  --header-booking-height:  3.75rem;  /* minimal booking/course chrome height */
+
+  /* ── Container widths (semantic names for the Container pattern) ── */
+  --container-read:    var(--max-width-read);
+  --container-form:    var(--max-width-form);
+  --container-narrow:  var(--max-width-small);
+  --container-default: var(--max-width-main);
+  --container-wide:    var(--max-width-wide);
+  --container-full:    var(--max-width-full);
+  --container-padding-x: var(--site-margin);
+
+  /* ── Cards (calm: flat field + hairline; hover lift only on marketing) ── */
+  --card-bg:           var(--color-page);
+  --card-bg-alt:       var(--color-page-tint);
+  --card-border:       var(--color-grape-o12);
+  --card-border-width: var(--border-width-main);
+  --card-padding:      var(--space-5);
+  --card-radius:       var(--radius-small);
+  --card-shadow:       none;                              /* flat by default (risograph) */
+  --card-shadow-hover: 0 8px 0 var(--color-grape-o08);    /* flat poster offset, no blur pillow */
+
+  /* ── Form inputs (calm register: legible, generous, AA in every state) ── */
+  --input-bg:           var(--color-page);
+  --input-text:         var(--color-grape);
+  --input-placeholder:  var(--color-grape-soft);
+  --input-border:       var(--color-grape-o40);
+  --input-border-focus: var(--color-grape);
+  --input-border-error: var(--color-coral-deep);
+  --input-ring-focus:   var(--color-marigold-o30);
+  --input-radius:       var(--radius-small);
+  --input-height:       3.25rem;   /* 52px, >=44px touch */
+  --input-padding-x:    var(--space-3);
+
+  /* ── Cue chip (THE bridge component across all surfaces) ──
+     LOUD: grape text on marigold pill (9.0:1).
+     CALM: grape text on a tint pill (same shape, volume down). */
+  --chip-radius:        var(--radius-round);
+  --chip-font:          var(--font-body);
+  --chip-weight:        var(--font-weight-heavy);
+  --chip-size:          var(--font-size-chip);
+  --chip-tracking:      var(--letter-spacing-wider);
+  --chip-padding-y:     0.375rem;
+  --chip-padding-x:     0.75rem;
+  /* loud */
+  --chip-loud-bg:       var(--color-marigold);
+  --chip-loud-text:     var(--color-grape);
+  /* calm (wizard / course) */
+  --chip-calm-bg:       var(--color-page-tint);
+  --chip-calm-text:     var(--color-grape);
+  --chip-calm-border:   var(--color-grape-o20);
+  /* mint variant (legals / reassurance / success) */
+  --chip-mint-bg:       var(--color-mint);
+  --chip-mint-text:     var(--color-grape);
+
+  /* ── Booking stepper ── */
+  --step-dot-size:       2.25rem;   /* 36px */
+  --step-track:          var(--color-grape-o20);
+  --step-done-bg:        var(--color-mint);
+  --step-done-text:      var(--color-grape);
+  --step-current-bg:     var(--color-coral);
+  --step-current-text:   var(--color-page);
+  --step-current-ring:   var(--color-coral-o40);
+  --step-upcoming-bg:    var(--color-page);
+  --step-upcoming-text:  var(--color-grape-soft);
+  --step-upcoming-border: var(--color-grape-o40);
+  --step-label:          var(--color-grape);
+  --step-label-muted:    var(--color-grape-soft);
+  --step-optional-label: var(--color-marigold-deep);
+
+  /* ── Running-total bar (persistent overlay; reserves space, inverts) ── */
+  --total-bar-bg:        var(--color-grape);
+  --total-bar-text:      var(--color-page);
+  --total-bar-accent:    var(--color-marigold);   /* the $ figure */
+  --total-bar-height:    4.25rem;
+  --total-bar-border:    var(--color-page-on-grape-o55);
+
+  /* ── Extras toggle card (Step 5) ── */
+  --toggle-bg:           var(--color-page);
+  --toggle-bg-on:        var(--color-field-mint);
+  --toggle-border:       var(--color-grape-o20);
+  --toggle-border-on:    var(--color-mint-deep);
+  --toggle-check-bg:     var(--color-mint);
+  --toggle-check-mark:   var(--color-grape);
+
+  /* ── Progress ring (course) ── */
+  --ring-track:          var(--color-grape-o12);
+  --ring-fill:           var(--color-mint);
+  --ring-label:          var(--color-grape);
+  --ring-thickness:      0.5rem;
+
+  /* ── Course shell ── */
+  --course-sidebar-bg:     var(--color-page-tint);
+  --course-sidebar-border: var(--color-grape-o12);
+  --course-topbar-bg:      var(--color-page-o92);
+  --lesson-callout-bg:     var(--color-field-marigold);  /* warm voice asides */
+  --lesson-callout-border: var(--color-marigold-deep);
+  --lesson-example-bg:     var(--color-field-tint);       /* example boxes */
+  --lesson-example-border: var(--color-grape-o20);
+  --lesson-tip-bg:         var(--color-field-mint);        /* tips */
+  --lesson-tip-border:     var(--color-mint-deep);
+  --lesson-locked-overlay: var(--color-page-o80);
+  --lesson-measure:        var(--max-width-read);
+
+  /* ── Video slot placeholder ── */
+  --video-slot-bg:       var(--color-grape);
+  --video-slot-text:     var(--color-page);
+  --video-slot-icon:     var(--color-marigold);
+
+  /* ── Overlays ── */
+  --overlay-bg:          var(--color-grape-fill-o85);
+  --overlay-bg-light:    var(--color-page-o92);
+
+  /* ── Sticky mobile CTA bar (marketing; reserves space, inverts per surface) ── */
+  --sticky-cta-height:   4.25rem;
+  --sticky-cta-bg:       var(--color-coral);
+  --sticky-cta-text:     var(--color-grape);
+  --sticky-cta-border:   var(--color-grape-o20);
+}
+
+/* Component bridge inversions on dark sections. */
+[data-theme="grape"], [data-theme="coral"] {
+  --card-bg:           color-mix(in srgb, var(--color-page) 8%, var(--color-grape));
+  --card-border:       color-mix(in srgb, var(--color-page) 22%, transparent);
+  --card-shadow-hover: none;
+  --chip-calm-bg:      color-mix(in srgb, var(--color-page) 14%, transparent);
+  --chip-calm-text:    var(--color-page);
+  --header-text:       var(--color-page);
+  --sticky-cta-bg:     var(--color-coral);
+  --sticky-cta-text:   var(--color-page);   /* white on coral, >=18px bold, 3.5:1 -- big label only */
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ZONE 4: COMPONENT TOKENS (buttons, nav, links)
+   Primary button is the most saturated object on every page: the colour
+   logic itself pulls the eye to the CTA. Default label is GRAPE-on-CORAL
+   (4.5:1, holds at every size and state). White-on-coral allowed ONLY for
+   the single large bold display CTA (>=18px bold).
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Button presentation ── */
+  --btn-radius:         var(--radius-round);          /* pill -- confident poster shape */
+  --btn-font:           var(--font-body);
+  --btn-font-weight:    var(--font-weight-heavy);     /* Archivo 800 */
+  --btn-letter-spacing: var(--letter-spacing-wide);
+  --btn-text-transform: none;
+  --btn-border-width:   var(--border-width-main);
+  --btn-padding-x:      var(--space-4);
+  --btn-padding-x-lg:   var(--space-5);
+
+  /* ── Primary (grape label on coral fill -- the conversion button) ── */
+  --btn-primary-bg:           var(--color-coral);
+  --btn-primary-border:       var(--color-coral);
+  --btn-primary-text:         var(--color-grape);       /* 4.5:1, holds every state */
+  --btn-primary-bg-hover:     var(--color-coral-deep);
+  --btn-primary-border-hover: var(--color-coral-deep);
+  --btn-primary-text-hover:   var(--color-page);        /* white on coral-deep, 5.6:1 */
+  --btn-primary-bg-active:    var(--color-coral-deep);
+  --btn-primary-text-active:  var(--color-page);
+  --btn-primary-bg-disabled:  var(--color-coral-o40);
+  --btn-primary-text-disabled: var(--color-grape-o60);
+
+  /* ── Display-CTA variant (hero only): white label on coral, >=18px bold ── */
+  --btn-display-bg:           var(--color-coral);
+  --btn-display-text:         var(--color-page);         /* 3.5:1, large bold only */
+  --btn-display-bg-hover:     var(--color-coral-deep);
+  --btn-display-text-hover:   var(--color-page);
+
+  /* ── Secondary (grape outline, fills to grape on hover) ── */
+  --btn-secondary-bg:           transparent;
+  --btn-secondary-border:       var(--color-grape);
+  --btn-secondary-text:         var(--color-grape);
+  --btn-secondary-bg-hover:     var(--color-grape);
+  --btn-secondary-border-hover: var(--color-grape);
+  --btn-secondary-text-hover:   var(--color-page);
+
+  /* ── Tertiary / text link button (coral-deep text, animated underline) ── */
+  --btn-tertiary-bg:           transparent;
+  --btn-tertiary-border:       transparent;
+  --btn-tertiary-text:         var(--color-coral-deep);
+  --btn-tertiary-bg-hover:     var(--color-coral-o12);
+  --btn-tertiary-text-hover:   var(--color-coral-deep);
+
+  /* ── Mint / success button (course "mark complete and continue") ── */
+  --btn-success-bg:           var(--color-mint);
+  --btn-success-border:       var(--color-mint);
+  --btn-success-text:         var(--color-grape);       /* grape on mint, high contrast */
+  --btn-success-bg-hover:     var(--color-mint-deep);
+  --btn-success-text-hover:   var(--color-page);        /* white on mint-deep, 4.6:1 */
+}
+
+/* On grape/coral dark sections the primary CTA stays coral with a WHITE label. */
+[data-theme="grape"] {
+  --btn-primary-bg:           var(--color-coral);
+  --btn-primary-text:         var(--color-page);         /* white on coral, large/bold CTA */
+  --btn-primary-bg-hover:     var(--color-coral-deep);
+  --btn-primary-text-hover:   var(--color-page);
+  --btn-secondary-border:     var(--color-page);
+  --btn-secondary-text:       var(--color-page);
+  --btn-secondary-bg-hover:   var(--color-page);
+  --btn-secondary-text-hover: var(--color-grape);
+  --btn-tertiary-text:        var(--color-marigold);     /* marigold link on grape, 3:1+ large */
+  --btn-tertiary-text-hover:  var(--color-page);
+}
+
+[data-theme="coral"] {
+  --btn-primary-bg:           var(--color-grape);        /* on a coral band the CTA flips to grape */
+  --btn-primary-border:       var(--color-grape);
+  --btn-primary-text:         var(--color-page);         /* white on grape, AAA */
+  --btn-primary-bg-hover:     color-mix(in srgb, var(--color-grape) 85%, black);
+  --btn-primary-text-hover:   var(--color-page);
+  --btn-secondary-border:     var(--color-page);
+  --btn-secondary-text:       var(--color-page);
+  --btn-secondary-bg-hover:   var(--color-page);
+  --btn-secondary-text-hover: var(--color-coral-deep);
+}
+
+
+/* ── Links (two cues: coral-deep colour + styled coral underline) ── */
+:root {
+  --link-text:           var(--color-coral-deep);
+  --link-underline:      var(--color-coral-deep);
+  --link-text-hover:     var(--color-coral-deep);
+  --link-underline-hover: var(--color-coral-deep);
+  --link-offset:         0.18em;
+  --link-thickness:      0.08em;
+  --link-thickness-hover: 0.14em;
+}
+
+[data-theme="grape"], [data-theme="coral"] {
+  --link-text:            var(--color-marigold);
+  --link-underline:       var(--color-marigold);
+  --link-text-hover:      var(--color-page);
+  --link-underline-hover: var(--color-page);
+}
+
+
+/* ── Nav ── */
+:root {
+  --nav-bg:                  var(--color-page);
+  --nav-text:                var(--color-grape);
+  --nav-link-active:         var(--color-coral-deep);
+  --nav-height-total:        var(--header-height);
+  --nav-max-width:           var(--max-width-main);
+  --nav-padding-x:           var(--site-margin);
+  --nav-radius:              var(--radius-small);
+  --nav-hamburger-thickness: var(--border-width-bold);
+  --nav-hamburger-gap:       var(--space-2);
+  --nav-drawer-bg:           var(--color-grape);   /* mobile drawer is a loud grape field */
+  --nav-drawer-text:         var(--color-page);
+  --nav-menu-open-duration:  var(--motion-duration-base);
+  --nav-menu-close-duration: var(--motion-duration-base);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ZONE 5: TEXT STYLE RULES
+   Element defaults in @layer base (overridable by Tailwind).
+   Opt-in classes (.hype, .display, .h1 ...) UNLAYERED (locked-in).
+   Link resets UNLAYERED.
+
+   ASSIGNMENT:
+     Hype Lines + display headings  -> Anton (--font-display)
+     H2 calm                        -> Archivo Black (--font-heavy 900)
+     H3                             -> Archivo (--font-body 800)
+     Body / UI / course             -> Archivo (--font-body 400/500)
+     Cue chip / meta caps           -> Archivo (--font-body 800, tracked caps)
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer base {
+
+  /* ── Element resets ── */
+  h1, h2, h3, h4, h5, h6, p, blockquote, label {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    text-wrap: inherit;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  button {
+    background-color: unset;
+    padding: unset;
+    text-align: inherit;
+  }
+
+  button:not(:disabled) { cursor: pointer; }
+
+  img::selection { background: transparent; }
+
+  /* ── Line-height trim ──
+     The trim cancels a heading/paragraph's leading half-line so it hugs its
+     box. CRITICAL: the negative -0.5lh term is sized to ONE line, so on a
+     multi-line heading it over-pulls the following element and causes overlap.
+     It is therefore gentle on body + Archivo sub-headings (small positive trim
+     only, no negative-lh pull) and only applied at full Anton strength to the
+     display headings, which are short, single-line, and need the tight cap
+     trim. This split is the system-level fix for the heading->body overlap. */
+  :is(h1, h2, h3, h4, h5, h6, p)::before {
+    content: "";
+    display: table;
+    margin-bottom: calc(-1 * var(--font-trim-top));
+  }
+  :is(h1, h2, h3, h4, h5, h6, p)::after {
+    content: "";
+    display: table;
+    margin-top: calc(-1 * var(--font-trim-bottom));
+  }
+  /* Display headings (Anton): tight single-line cap trim using the leading. */
+  .display::before, .hype-hero::before, .hype::before, h1::before, .h1::before {
+    margin-bottom: calc(-0.5lh + var(--font-trim-display-top));
+  }
+  .display::after, .hype-hero::after, .hype::after, h1::after, .h1::after {
+    margin-top: 0;
+    margin-bottom: calc(-0.5lh + var(--font-trim-display-bottom));
+  }
+  .text-trim-off::before, .text-trim-off::after { content: unset; }
+
+  /* ── Margin trim ── */
+  .margin-trim > :first-child { margin-top: 0; }
+  .margin-trim > :last-child  { margin-bottom: 0; }
+
+  /* ── Body defaults ──
+     Lifted to medium (500): the brand is a bold-pop identity and the body read
+     thin against the poster headings. Medium holds the colour and the weight
+     variation the client liked, without breaking the calm reading surfaces. */
+  body {
+    font-family: var(--font-body);
+    font-size: var(--font-size-text-main);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-huge);
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--theme-text);
+    background-color: var(--theme-bg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ── Text size variants ── */
+  small, .text-small { font-size: var(--font-size-text-small); }
+  .text-large {
+    font-size: var(--font-size-text-large);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-large);
+  }
+
+  /* ── Headings (element defaults; overridable by Tailwind) ── */
+  h6 {
+    font-family: var(--font-body);
+    font-size: var(--font-size-h6);
+    font-weight: var(--font-weight-heavy);
+    line-height: var(--line-height-medium);
+    letter-spacing: var(--letter-spacing-normal);
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-3);
+    text-wrap: balance;
+  }
+  h5 {
+    font-family: var(--font-body);
+    font-size: var(--font-size-h5);
+    font-weight: var(--font-weight-heavy);
+    line-height: var(--line-height-medium);
+    letter-spacing: var(--letter-spacing-normal);
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-3);
+    text-wrap: balance;
+  }
+  h4 {
+    font-family: var(--font-body);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-heavy);
+    line-height: var(--line-height-medium);
+    letter-spacing: var(--letter-spacing-normal);
+    margin-top: var(--space-7);
+    margin-bottom: var(--space-4);
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--font-body);
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-heavy);
+    line-height: var(--line-height-medium);
+    letter-spacing: var(--letter-spacing-normal);
+    margin-top: var(--space-7);
+    margin-bottom: var(--space-4);
+    text-wrap: balance;
+  }
+  h2 {
+    font-family: var(--font-heavy);
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-black);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-normal);
+    margin-top: var(--space-7);
+    margin-bottom: var(--space-5);
+    text-wrap: balance;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-snug);
+    margin-top: var(--space-7);
+    margin-bottom: var(--space-5);
+    text-wrap: balance;
+  }
+
+  /* ── Selection ── */
+  ::selection {
+    background-color: var(--theme-selection-bg);
+    color: var(--theme-selection-text);
+  }
+
+  /* ── Focus offset ── */
+  a, button, [tabindex], input, select, textarea {
+    outline-offset: var(--focus-offset-outer);
+  }
+  :focus-visible {
+    outline: var(--focus-width) solid var(--color-grape);
+    outline-style: solid;
+  }
+  /* On dark sections the focus ring inverts to marigold for visibility. */
+  [data-theme="grape"] :focus-visible,
+  [data-theme="coral"] :focus-visible {
+    outline-color: var(--color-marigold);
+  }
+
+  /* ── Disabled buttons ── */
+  button:disabled { opacity: 0.5; pointer-events: none; }
+
+  /* ── Empty select placeholder ── */
+  select:has(option[value=""]:checked) {
+    color: var(--input-placeholder);
+  }
+}
+
+
+/* ── Opt-in text classes (UNLAYERED -- locked-in) ── */
+
+/* Links: two cues -- coral-deep colour + styled coral underline, skip-ink,
+   thickens on hover. Never browser-default underline.
+   Scoped to in-prose links only (:not(.btn):not(.link-plain)): anchor-based
+   buttons keep their layered .btn-* colour + no underline, and chrome links
+   (nav, logo, footer, buttons-as-anchors) use .link-plain. An unlayered base
+   `a` rule otherwise beats @layer components and turns the primary CTA into a
+   link; and because this rule is unlayered, it must explicitly exclude
+   .link-plain (otherwise :not(.btn) out-specifies the .link-plain opt-out). */
+a:not(.btn):not(.link-plain) {
+  color: var(--link-text);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
+  text-decoration-color: var(--link-underline);
+  text-decoration-thickness: var(--link-thickness);
+  text-underline-offset: var(--link-offset);
+  text-decoration-skip-ink: auto;
+  transition: text-decoration-thickness var(--motion-duration-fast) ease,
+              color var(--motion-duration-fast) ease;
+}
+a:not(.btn):not(.link-plain):hover {
+  color: var(--link-text-hover);
+  text-decoration-color: var(--link-underline-hover);
+  text-decoration-thickness: var(--link-thickness-hover);
+}
+a:focus-visible {
+  outline: var(--focus-width) solid var(--color-grape);
+  outline-offset: var(--focus-offset-outer);
+  border-radius: 2px;
+}
+/* Chrome links (nav, logo, footer cols, buttons-as-anchors) opt out of the
+   underline via .link-plain so the underline reads as "in-prose link" only. */
+.link-plain {
+  text-decoration: none;
+  font-weight: inherit;
+}
+.link-plain:hover { text-decoration: none; }
+
+/* Hero Hype Line scale */
+.hype-hero {
+  font-family: var(--font-display);
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-small);
+  letter-spacing: var(--letter-spacing-tight);
+  text-transform: uppercase;
+  /* Wrap at word boundaries (no balancer mid-word breaks at 375px). The hero
+     line is short words, so it stacks cleanly word by word. */
+  text-wrap: pretty;
+  /* A genuinely over-long single word (e.g. UNFORGETTABLE) still breaks rather
+     than overflow the viewport, but break-word (not anywhere) only breaks a
+     word that cannot otherwise fit -- short words stay whole. */
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+/* Section Hype Line scale */
+.hype {
+  font-family: var(--font-display);
+  font-size: var(--font-size-hype);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-snug);
+  text-transform: uppercase;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
+}
+/* The hit word inside a Hype Line (display scale: coral on light, AA large). */
+.hit {
+  color: var(--theme-heading-accent);
+}
+
+.display {
+  font-family: var(--font-display);
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-small);
+  letter-spacing: var(--letter-spacing-tight);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.h1 {
+  font-family: var(--font-display);
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-snug);
+}
+.h2 {
+  font-family: var(--font-heavy);
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-black);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-normal);
+}
+.h3 {
+  font-family: var(--font-body);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-heavy);
+  line-height: var(--line-height-medium);
+  letter-spacing: var(--letter-spacing-normal);
+}
+.h4 {
+  font-family: var(--font-body);
+  font-size: var(--font-size-h4);
+  font-weight: var(--font-weight-heavy);
+  line-height: var(--line-height-medium);
+  letter-spacing: var(--letter-spacing-normal);
+}
+.h5 {
+  font-family: var(--font-body);
+  font-size: var(--font-size-h5);
+  font-weight: var(--font-weight-heavy);
+  line-height: var(--line-height-medium);
+  letter-spacing: var(--letter-spacing-normal);
+}
+.h6 {
+  font-family: var(--font-body);
+  font-size: var(--font-size-h6);
+  font-weight: var(--font-weight-heavy);
+  line-height: var(--line-height-medium);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+/* Small meta caps (eyebrows, time chips) -- tracked Archivo, NOT mono.
+   Lifted to bold (700) so small tracked labels carry the bold-pop identity and
+   do not read thin at 13-14px. */
+.meta-caps {
+  font-family: var(--font-body);
+  font-size: var(--font-size-text-small);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+/* Long-form course reading (opens line-height, holds 60-70ch via container).
+   Medium (500) matches the lifted body weight; still comfortable for long-form
+   reading on the calm course surface. */
+.prose-course {
+  font-family: var(--font-body);
+  font-size: var(--font-size-text-main);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-huge);
+  color: var(--color-grape-soft);
+  max-width: var(--max-width-read);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   TAILWIND CSS 4 INTEGRATION (add to globals.css)
+   Registers a subset of tokens so utilities resolve. Unregistered
+   colours silently fail with opacity modifiers, so any colour used as
+   bg-X/NN or text-X/NN must be registered here.
+
+   @theme inline {
+     --color-page: var(--color-page);
+     --color-page-tint: var(--color-page-tint);
+     --color-grape: var(--color-grape);
+     --color-grape-soft: var(--color-grape-soft);
+     --color-coral: var(--color-coral);
+     --color-coral-deep: var(--color-coral-deep);
+     --color-marigold: var(--color-marigold);
+     --color-marigold-deep: var(--color-marigold-deep);
+     --color-mint: var(--color-mint);
+     --color-mint-deep: var(--color-mint-deep);
+
+     --color-bg: var(--theme-bg);
+     --color-bg-2: var(--theme-bg-2);
+     --color-text: var(--theme-text);
+     --color-text-muted: var(--theme-text-muted);
+     --color-heading-accent: var(--theme-heading-accent);
+     --color-border: var(--theme-border);
+
+     --color-btn-primary-bg: var(--btn-primary-bg);
+     --color-btn-primary-text: var(--btn-primary-text);
+     --color-btn-secondary-text: var(--btn-secondary-text);
+     --color-btn-success-bg: var(--btn-success-bg);
+
+     --font-display: var(--font-display);
+     --font-body: var(--font-body);
+
+     --font-size-sm: var(--font-size-text-small);
+     --font-size-base: var(--font-size-text-main);
+     --font-size-lg: var(--font-size-text-large);
+
+     --spacing-1: var(--space-1);
+     --spacing-2: var(--space-2);
+     --spacing-3: var(--space-3);
+     --spacing-4: var(--space-4);
+     --spacing-5: var(--space-5);
+     --spacing-6: var(--space-6);
+     --spacing-7: var(--space-7);
+     --spacing-8: var(--space-8);
+
+     --radius-sm: var(--radius-small);
+     --radius-DEFAULT: var(--radius-main);
+     --radius-full: var(--radius-round);
+   }
+   ═══════════════════════════════════════════════════════════════ */

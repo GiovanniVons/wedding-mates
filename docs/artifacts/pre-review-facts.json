@@ -1,0 +1,650 @@
+{
+  "project": "wedding-mates",
+  "date": "2026-06-22",
+  "checks": [
+    {
+      "name": "rgba() usage",
+      "category": "Token Compliance",
+      "command": "grep -rn \"rgba(\" /Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src",
+      "verdict": "CLEAN",
+      "count": 0,
+      "raw": "(no matches)",
+      "details": []
+    },
+    {
+      "name": "Bare Tailwind spacing",
+      "category": "Token Compliance",
+      "command": "grep -rnE \"(pt|pb|py|px|mt|mb|my|mx|gap|p|m)-[0-9]+\" /Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src --include=\"*.tsx\"",
+      "verdict": "CLEAN",
+      "count": 0,
+      "raw": "(no matches)",
+      "details": []
+    },
+    {
+      "name": "Bare Tailwind radius",
+      "category": "Token Compliance",
+      "command": "grep -rnE \"rounded-(sm|md|lg|xl|2xl|3xl|full)\" /Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src --include=\"*.tsx\"",
+      "verdict": "CLEAN",
+      "count": 0,
+      "raw": "(no matches)",
+      "details": []
+    },
+    {
+      "name": "var(--space-*) token references",
+      "category": "Token Compliance",
+      "command": "grep -rn \"var(--space-\" /Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src",
+      "verdict": "FOUND",
+      "count": 475,
+      "raw": "475 references found across source files",
+      "details": []
+    },
+    {
+      "name": "Zone 5 cascade split",
+      "category": "Token Compliance",
+      "command": "parse styles/tokens.css, /Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/globals.css for @layer base + element selectors",
+      "verdict": "CLEAN",
+      "count": 0,
+      "raw": "Element selectors correctly inside @layer base",
+      "details": []
+    },
+    {
+      "name": "@theme inline registration",
+      "category": "Token Compliance",
+      "command": "parse /Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/globals.css + grep opacity/state usage in components",
+      "verdict": "CLEAN",
+      "count": 20,
+      "raw": "20 colors registered; 0 opacity uses; 0 state variant uses",
+      "details": []
+    },
+    {
+      "name": "Infrastructure files",
+      "category": "File Existence",
+      "command": "os.path.isfile() for sitemap.ts, robots.ts, error.tsx, not-found.tsx, layout.tsx",
+      "verdict": "CLEAN",
+      "count": 0,
+      "raw": "  FOUND: sitemap.ts\n  FOUND: robots.ts\n  FOUND: error.tsx\n  FOUND: not-found.tsx\n  FOUND: layout.tsx",
+      "details": []
+    },
+    {
+      "name": "Design Book route",
+      "category": "File Existence",
+      "command": "os.path.isfile() across design-book route candidates",
+      "verdict": "CLEAN",
+      "count": 0,
+      "raw": "  FOUND: src/app/(internal)/design-book/page.tsx",
+      "details": [
+        "src/app/(internal)/design-book/page.tsx"
+      ]
+    },
+    {
+      "name": "Skip-to-content link",
+      "category": "File Existence",
+      "command": "grep -n \"skip\" /Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/layout.tsx",
+      "verdict": "FOUND",
+      "count": 1,
+      "raw": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/layout.tsx:39:        <a href=\"#main\" className=\"skip-link\">",
+      "details": [
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/layout.tsx",
+          "line": "39",
+          "content": "<a href=\"#main\" className=\"skip-link\">"
+        }
+      ]
+    },
+    {
+      "name": "JSON-LD imports",
+      "category": "File Existence",
+      "command": "grep -rn \"JsonLd\" /Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src",
+      "verdict": "FOUND",
+      "count": 13,
+      "raw": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/faq/page.tsx:10:import { JsonLd, faqSchema } from \"@/components/seo/JsonLd\";\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/faq/page.tsx:27:      <JsonLd data={faqSchema(ALL_FAQ_ITEMS)} />\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/about/page.tsx:9:import { JsonLd, personSchema } from \"@/components/seo/JsonLd\";\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/about/page.tsx:24:      <JsonLd data={personSchema()} />\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/how-it-works/page.tsx:11:import { JsonLd, courseSchema } from \"@/components/seo/JsonLd\";\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/how-it-works/page.tsx:96:      <JsonLd data={courseSchema()} />\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/pricing/page.tsx:10:import { JsonLd, productSchema, courseSchema } from \"@/components/seo/JsonLd\";\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/pricing/page.tsx:26:      <JsonLd data={[productSchema(), courseSchema()]} />\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/layout.tsx:5:  JsonLd,\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/layout.tsx:8:} from \"@/components/seo/JsonLd\";\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/layout.tsx:44:        <JsonLd data={[organizationSchema(), websiteSchema()]} />\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/seo/JsonLd.tsx:4: * JsonLd -- server-rendered structured data. A single <script type=\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/seo/JsonLd.tsx:9:export function JsonLd({ data }: { data: object | object[] }) {",
+      "details": [
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/faq/page.tsx",
+          "line": "10",
+          "content": "import { JsonLd, faqSchema } from \"@/components/seo/JsonLd\";"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/faq/page.tsx",
+          "line": "27",
+          "content": "<JsonLd data={faqSchema(ALL_FAQ_ITEMS)} />"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/about/page.tsx",
+          "line": "9",
+          "content": "import { JsonLd, personSchema } from \"@/components/seo/JsonLd\";"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/about/page.tsx",
+          "line": "24",
+          "content": "<JsonLd data={personSchema()} />"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/how-it-works/page.tsx",
+          "line": "11",
+          "content": "import { JsonLd, courseSchema } from \"@/components/seo/JsonLd\";"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/how-it-works/page.tsx",
+          "line": "96",
+          "content": "<JsonLd data={courseSchema()} />"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/pricing/page.tsx",
+          "line": "10",
+          "content": "import { JsonLd, productSchema, courseSchema } from \"@/components/seo/JsonLd\";"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(marketing)/pricing/page.tsx",
+          "line": "26",
+          "content": "<JsonLd data={[productSchema(), courseSchema()]} />"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/layout.tsx",
+          "line": "5",
+          "content": "JsonLd,"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/layout.tsx",
+          "line": "8",
+          "content": "} from \"@/components/seo/JsonLd\";"
+        }
+      ]
+    },
+    {
+      "name": "ARIA attributes",
+      "category": "Accessibility",
+      "command": "grep -rn \"aria-expanded|aria-current|aria-label\" in src/",
+      "verdict": "CLEAN",
+      "count": 28,
+      "raw": "  aria-expanded (menu toggle): 4 hits\n  aria-current (nav links): 5 hits\n  aria-label (interactive elements): 19 hits",
+      "details": []
+    },
+    {
+      "name": "focus-visible global styles",
+      "category": "Accessibility",
+      "command": "grep -rn \"focus-visible\" /Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/styles /Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app",
+      "verdict": "FOUND",
+      "count": 9,
+      "raw": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/styles/tokens.css:854:  :focus-visible {\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/styles/tokens.css:859:  [data-theme=\"grape\"] :focus-visible,\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/styles/tokens.css:860:  [data-theme=\"coral\"] :focus-visible {\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/styles/tokens.css:900:a:focus-visible {\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/globals.css:65:   Pseudo-selectors (:hover, :focus-visible, :active) that inline\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/globals.css:242:  .field-input:focus-visible,\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/globals.css:243:  .field-textarea:focus-visible,\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/globals.css:244:  .field-select:focus-visible {\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/globals.css:287:  .peer:focus-visible ~ .choice-box {",
+      "details": [
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/styles/tokens.css",
+          "line": "854",
+          "content": ":focus-visible {"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/styles/tokens.css",
+          "line": "859",
+          "content": "[data-theme=\"grape\"] :focus-visible,"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/styles/tokens.css",
+          "line": "860",
+          "content": "[data-theme=\"coral\"] :focus-visible {"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/styles/tokens.css",
+          "line": "900",
+          "content": "a:focus-visible {"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/globals.css",
+          "line": "65",
+          "content": "Pseudo-selectors (:hover, :focus-visible, :active) that inline"
+        }
+      ]
+    },
+    {
+      "name": "prefers-reduced-motion",
+      "category": "Accessibility",
+      "command": "grep -rnE \"useReducedMotion|prefers-reduced-motion\" /Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src",
+      "verdict": "FOUND",
+      "count": 26,
+      "raw": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(internal)/design-book/sections/MotionSection.tsx:42:      intro=\"MOTION_INTENSITY 6, rationed by surface. Framer Motion for entrances, a tiny burst util for the single confetti beat, CSS for hover/focus. No GSAP scroll-story. Every reveal respects prefers-reduced-motion (collapse to instant; bursts killed).\"\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(internal)/design-book/sections/MotionSection.tsx:54:          Preview prefers-reduced-motion (note)\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/globals.css:215:  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/styles/tokens.css:330:/* prefers-reduced-motion collapses every reveal to instant and kills bursts. */\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/styles/tokens.css:331:@media (prefers-reduced-motion: reduce) {\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/ui/ProgressRing.tsx:4:import { useReducedMotion } from \"framer-motion\";\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/ui/ProgressRing.tsx:18:  const reduceMotion = useReducedMotion();\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/ui/Accordion.tsx:4:import { AnimatePresence, motion, useReducedMotion } from \"framer-motion\";\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/ui/Accordion.tsx:19:  const reduceMotion = useReducedMotion();\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/ui/HypeLine.tsx:4:import { motion, useInView, useReducedMotion } from \"framer-motion\";\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/ui/HypeLine.tsx:23: * prefers-reduced-motion: the full line renders at once with final colours,\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/ui/HypeLine.tsx:63:  const reduceMotion = useReducedMotion();\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/sections/HomeHero.tsx:4:import { motion, useReducedMotion } from \"framer-motion\";\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/sections/HomeHero.tsx:23:  const reduce = useReducedMotion();\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/booking/BookingWizard.tsx:5:import { AnimatePresence, motion, useReducedMotion } from \"framer-motion\";\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/booking/BookingWizard.tsx:97:  const reduceMotion = useReducedMotion();\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/booking/BookingConfirmation.tsx:262:        @media (prefers-reduced-motion: reduce) { [style*=\"wm-spin\"] { animation: none !important; } }\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/layout/StickyCtaController.tsx:21: * prefers-reduced-motion is irrelevant here (the bar uses a CSS transform\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/layout/Header.tsx:4:import { AnimatePresence, motion, useReducedMotion } from \"framer-motion\";\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/layout/Header.tsx:35:  const reduceMotion = useReducedMotion();\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/animations/ConfettiBurst.tsx:10: * duration come from Zone 2 tokens, which prefers-reduced-motion sets to 0,\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/animations/ConfettiBurst.tsx:132:        @media (prefers-reduced-motion: reduce) {\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/animations/ScrollReveal.tsx:3:import { motion, useReducedMotion, type Variants } from \"framer-motion\";\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/animations/ScrollReveal.tsx:10: * prefers-reduced-motion: renders final state instantly, no transform, no fade.\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/animations/ScrollReveal.tsx:37:  const reduce = useReducedMotion();\n/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/animations/ScrollReveal.tsx:92:  const reduce = useReducedMotion();",
+      "details": [
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(internal)/design-book/sections/MotionSection.tsx",
+          "line": "42",
+          "content": "intro=\"MOTION_INTENSITY 6, rationed by surface. Framer Motion for entrances, a tiny burst util for the single confetti beat, CSS for hover/focus. No GSAP scroll-story. Every reveal respects prefers-reduced-motion (collapse to instant; bursts killed).\""
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/(internal)/design-book/sections/MotionSection.tsx",
+          "line": "54",
+          "content": "Preview prefers-reduced-motion (note)"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/app/globals.css",
+          "line": "215",
+          "content": "@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/styles/tokens.css",
+          "line": "330",
+          "content": "/* prefers-reduced-motion collapses every reveal to instant and kills bursts. */"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/styles/tokens.css",
+          "line": "331",
+          "content": "@media (prefers-reduced-motion: reduce) {"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/ui/ProgressRing.tsx",
+          "line": "4",
+          "content": "import { useReducedMotion } from \"framer-motion\";"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/ui/ProgressRing.tsx",
+          "line": "18",
+          "content": "const reduceMotion = useReducedMotion();"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/ui/Accordion.tsx",
+          "line": "4",
+          "content": "import { AnimatePresence, motion, useReducedMotion } from \"framer-motion\";"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/ui/Accordion.tsx",
+          "line": "19",
+          "content": "const reduceMotion = useReducedMotion();"
+        },
+        {
+          "file": "/Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/src/components/ui/HypeLine.tsx",
+          "line": "4",
+          "content": "import { motion, useInView, useReducedMotion } from \"framer-motion\";"
+        }
+      ]
+    },
+    {
+      "name": "Build output",
+      "category": "Build",
+      "command": "npm run build (cwd: /Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates)",
+      "verdict": "CLEAN",
+      "count": 0,
+      "raw": "\n> wedding-mates@0.1.0 build\n> next build\n\n\u25b2 Next.js 16.2.9 (Turbopack)\n- Environments: .env.local\n\n  Creating an optimized production build ...\n\u2713 Compiled successfully in 2.7s\n  Running TypeScript ...\n  Finished TypeScript in 3.0s ...\n  Collecting page data using 11 workers ...\n  Generating static pages using 11 workers (0/23) ...\n  Generating static pages using 11 workers (5/23) \n  Generating static pages using 11 workers (11/23) \n  Generating static pages using 11 workers (17/23) \n\u2713 Generating static pages using 11 workers (23/23) in 237ms\n  Finalizing page optimization ...\n\nRoute (app)\n\u250c \u25cb /\n\u251c \u25cb /_not-found\n\u251c \u25cb /about\n\u251c \u0192 /api/contact\n\u251c \u0192 /api/stripe/checkout\n\u251c \u0192 /api/stripe/session-status\n\u251c \u0192 /api/stripe/webhook\n\u251c \u0192 /auth/callback\n\u251c \u25cb /blog\n\u251c \u0192 /blog/[slug]\n\u251c \u0192 /book\n\u251c \u0192 /book/confirmation\n\u251c \u25cb /contact\n\u251c \u0192 /course\n\u251c \u0192 /course/[moduleSlug]\n\u251c \u0192 /course/introduction\n\u251c \u0192 /course/locked\n\u251c \u0192 /course/readings\n\u251c \u0192 /course/strategies\n\u251c \u25cb /design-book\n\u251c \u25cb /faq\n\u251c \u0192 /forgot-password\n\u251c \u25cb /how-it-works\n\u251c \u0192 /login\n\u251c \u25cb /pricing\n\u251c \u25cb /privacy\n\u251c \u0192 /register\n\u251c \u0192 /reset-password\n\u251c \u25cb /reviews\n\u251c \u25cb /robots.txt\n\u251c \u25cb /sitemap.xml\n\u2514 \u25cb /terms\n\n\n\u0192 Proxy (Middleware)\n\n\u25cb  (Static)   prerendered as static content\n\u0192  (Dynamic)  server-rendered on demand\n\n\n",
+      "details": []
+    },
+    {
+      "name": "Font payload",
+      "category": "Build",
+      "command": "sum file sizes in /Users/vonzie./web-app projects/vonzie-in-house/vonzie-agency-agents.code-workspace/website-projects/client-projects/wedding-mates/public/fonts",
+      "verdict": "CLEAN",
+      "count": 0,
+      "raw": "Total: 0.0 KB across 0 font files",
+      "details": []
+    },
+    {
+      "name": "Dead dependencies",
+      "category": "Build",
+      "command": "package.json deps (12) vs import grep (19)",
+      "verdict": "CLEAN",
+      "count": 0,
+      "raw": "(all dependencies are imported)",
+      "details": []
+    },
+    {
+      "name": "Component manifest",
+      "category": "Manifests",
+      "command": "list src/components/ + grep imports",
+      "verdict": "CLEAN",
+      "count": 0,
+      "raw": "36 component files, 0 orphans\n\nAll components:\n  components/animations/ConfettiBurst.tsx IMPORTED\n  components/animations/ScrollReveal.tsx IMPORTED\n  components/booking/BookingConfirmation.tsx IMPORTED\n  components/booking/BookingWizard.tsx IMPORTED\n  components/course/CourseMobileNav.tsx IMPORTED\n  components/course/CourseSidebarLive.tsx IMPORTED\n  components/course/DashboardProgress.tsx IMPORTED\n  components/course/LessonActions.tsx IMPORTED\n  components/course/LessonBody.tsx IMPORTED\n  components/course/LessonView.tsx IMPORTED\n  components/course/SupportBlock.tsx IMPORTED\n  components/layout/BookingHeader.tsx IMPORTED\n  components/layout/Footer.tsx IMPORTED\n  components/layout/Header.tsx IMPORTED\n  components/layout/MarketingHeader.tsx IMPORTED\n  components/layout/StickyCtaBar.tsx IMPORTED\n  components/layout/StickyCtaController.tsx IMPORTED\n  components/sections/ContactForm.tsx IMPORTED\n  components/sections/CtaBand.tsx IMPORTED\n  components/sections/HomeHero.tsx IMPORTED\n  components/seo/JsonLd.tsx IMPORTED\n  components/ui/Accordion.tsx IMPORTED\n  components/ui/AuthShell.tsx IMPORTED\n  components/ui/BookingExtras.tsx IMPORTED\n  components/ui/Button.tsx IMPORTED\n  components/ui/Card.tsx IMPORTED\n  components/ui/Chip.tsx IMPORTED\n  components/ui/Container.tsx IMPORTED\n  components/ui/CourseUI.tsx IMPORTED\n  components/ui/Field.tsx IMPORTED\n  components/ui/FormAlert.tsx IMPORTED\n  components/ui/HypeLine.tsx IMPORTED\n  components/ui/Logo.tsx IMPORTED\n  components/ui/ProgressRing.tsx IMPORTED\n  components/ui/Section.tsx IMPORTED\n  components/ui/Stepper.tsx IMPORTED",
+      "details": {
+        "components": [
+          {
+            "file": "components/animations/ConfettiBurst.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/animations/ScrollReveal.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/booking/BookingConfirmation.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/booking/BookingWizard.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/course/CourseMobileNav.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/course/CourseSidebarLive.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/course/DashboardProgress.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/course/LessonActions.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/course/LessonBody.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/course/LessonView.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/course/SupportBlock.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/layout/BookingHeader.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/layout/Footer.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/layout/Header.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/layout/MarketingHeader.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/layout/StickyCtaBar.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/layout/StickyCtaController.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/sections/ContactForm.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/sections/CtaBand.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/sections/HomeHero.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/seo/JsonLd.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/Accordion.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/AuthShell.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/BookingExtras.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/Button.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/Card.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/Chip.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/Container.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/CourseUI.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/Field.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/FormAlert.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/HypeLine.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/Logo.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/ProgressRing.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/Section.tsx",
+            "imported": true
+          },
+          {
+            "file": "components/ui/Stepper.tsx",
+            "imported": true
+          }
+        ],
+        "orphans": []
+      }
+    },
+    {
+      "name": "Font manifest",
+      "category": "Manifests",
+      "command": "grep localFont + next/font/google in src/",
+      "verdict": "CLEAN",
+      "count": 0,
+      "raw": "9 fonts loaded, 0 next/font/google imports (should be 0)\n\n  anton (next/font/local) -- --font-anton -- src: ../fonts/anton.woff2\n  archivoBlack (next/font/local) -- --font-archivo-black -- src: ../fonts/archivo-black.woff2\n  archivo (next/font/local) -- --font-archivo -- src: ../fonts/archivo-variable.woff2\n  anton (next/font/local) -- --font-anton -- src: ../fonts/anton.woff2\n  archivoBlack (next/font/local) -- --font-archivo-black -- src: ../fonts/archivo-black.woff2\n  archivo (next/font/local) -- --font-archivo -- src: ../fonts/archivo-variable.woff2\n  anton (next/font/local) -- --font-anton -- src: ../fonts/anton.woff2\n  archivoBlack (next/font/local) -- --font-archivo-black -- src: ../fonts/archivo-black.woff2\n  archivo (next/font/local) -- --font-archivo -- src: ../fonts/archivo-variable.woff2",
+      "details": {
+        "fonts": [
+          {
+            "loader": "next/font/local",
+            "name": "anton",
+            "src": "../fonts/anton.woff2",
+            "css_variable": "--font-anton",
+            "weight": "400",
+            "file": "lib/fonts.ts"
+          },
+          {
+            "loader": "next/font/local",
+            "name": "archivoBlack",
+            "src": "../fonts/archivo-black.woff2",
+            "css_variable": "--font-archivo-black",
+            "weight": "400",
+            "file": "lib/fonts.ts"
+          },
+          {
+            "loader": "next/font/local",
+            "name": "archivo",
+            "src": "../fonts/archivo-variable.woff2",
+            "css_variable": "--font-archivo",
+            "weight": "400 800",
+            "file": "lib/fonts.ts"
+          },
+          {
+            "loader": "next/font/local",
+            "name": "anton",
+            "src": "../fonts/anton.woff2",
+            "css_variable": "--font-anton",
+            "weight": "400",
+            "file": "lib/fonts.ts"
+          },
+          {
+            "loader": "next/font/local",
+            "name": "archivoBlack",
+            "src": "../fonts/archivo-black.woff2",
+            "css_variable": "--font-archivo-black",
+            "weight": "400",
+            "file": "lib/fonts.ts"
+          },
+          {
+            "loader": "next/font/local",
+            "name": "archivo",
+            "src": "../fonts/archivo-variable.woff2",
+            "css_variable": "--font-archivo",
+            "weight": "400 800",
+            "file": "lib/fonts.ts"
+          },
+          {
+            "loader": "next/font/local",
+            "name": "anton",
+            "src": "../fonts/anton.woff2",
+            "css_variable": "--font-anton",
+            "weight": "400",
+            "file": "lib/fonts.ts"
+          },
+          {
+            "loader": "next/font/local",
+            "name": "archivoBlack",
+            "src": "../fonts/archivo-black.woff2",
+            "css_variable": "--font-archivo-black",
+            "weight": "400",
+            "file": "lib/fonts.ts"
+          },
+          {
+            "loader": "next/font/local",
+            "name": "archivo",
+            "src": "../fonts/archivo-variable.woff2",
+            "css_variable": "--font-archivo",
+            "weight": "400 800",
+            "file": "lib/fonts.ts"
+          }
+        ],
+        "google_imports": 0
+      }
+    },
+    {
+      "name": "Dependency manifest",
+      "category": "Manifests",
+      "command": "package.json dependencies + grep imports",
+      "verdict": "CLEAN",
+      "count": 0,
+      "raw": "15 dependencies, 14 imported, 1 build-only, 0 unused\n\n  @hookform/resolvers@^3.9.1 -- IMPORTED\n  @supabase/ssr@^0.5.2 -- IMPORTED\n  @supabase/supabase-js@^2.47.10 -- IMPORTED\n  clsx@^2.1.1 -- IMPORTED\n  framer-motion@^11.15.0 -- IMPORTED\n  next@^16.0.0 -- IMPORTED\n  react@^19.0.0 -- IMPORTED\n  react-dom@^19.0.0 -- BUILDONLY\n  react-hook-form@^7.54.2 -- IMPORTED\n  react-markdown@^9.0.1 -- IMPORTED\n  remark-gfm@^4.0.0 -- IMPORTED\n  resend@^4.0.1 -- IMPORTED\n  stripe@^17.5.0 -- IMPORTED\n  tailwind-merge@^2.6.0 -- IMPORTED\n  zod@^3.24.1 -- IMPORTED",
+      "details": {
+        "dependencies": [
+          {
+            "name": "@hookform/resolvers",
+            "version": "^3.9.1",
+            "status": "imported"
+          },
+          {
+            "name": "@supabase/ssr",
+            "version": "^0.5.2",
+            "status": "imported"
+          },
+          {
+            "name": "@supabase/supabase-js",
+            "version": "^2.47.10",
+            "status": "imported"
+          },
+          {
+            "name": "clsx",
+            "version": "^2.1.1",
+            "status": "imported"
+          },
+          {
+            "name": "framer-motion",
+            "version": "^11.15.0",
+            "status": "imported"
+          },
+          {
+            "name": "next",
+            "version": "^16.0.0",
+            "status": "imported"
+          },
+          {
+            "name": "react",
+            "version": "^19.0.0",
+            "status": "imported"
+          },
+          {
+            "name": "react-dom",
+            "version": "^19.0.0",
+            "status": "buildonly"
+          },
+          {
+            "name": "react-hook-form",
+            "version": "^7.54.2",
+            "status": "imported"
+          },
+          {
+            "name": "react-markdown",
+            "version": "^9.0.1",
+            "status": "imported"
+          },
+          {
+            "name": "remark-gfm",
+            "version": "^4.0.0",
+            "status": "imported"
+          },
+          {
+            "name": "resend",
+            "version": "^4.0.1",
+            "status": "imported"
+          },
+          {
+            "name": "stripe",
+            "version": "^17.5.0",
+            "status": "imported"
+          },
+          {
+            "name": "tailwind-merge",
+            "version": "^2.6.0",
+            "status": "imported"
+          },
+          {
+            "name": "zod",
+            "version": "^3.24.1",
+            "status": "imported"
+          }
+        ],
+        "devDependencies": {
+          "@playwright/test": "^1.49.1",
+          "@tailwindcss/postcss": "^4.0.0",
+          "@types/node": "^22.10.5",
+          "@types/react": "^19.0.2",
+          "@types/react-dom": "^19.0.2",
+          "tailwindcss": "^4.0.0",
+          "typescript": "^5.7.2"
+        },
+        "unused": []
+      }
+    },
+    {
+      "name": "Content quality",
+      "category": "Content",
+      "command": "grep for em dashes, console.log, TODO/FIXME in src/",
+      "verdict": "CLEAN",
+      "count": 0,
+      "raw": "  em_dashes: 0 hits\n  console_log: 0 hits\n  todos: 0 hits",
+      "details": {
+        "em_dashes": [],
+        "console_log": [],
+        "todos": []
+      }
+    },
+    {
+      "name": "Image optimization props",
+      "category": "Images",
+      "command": "grep -rn \"priority\" and \"sizes=\" in src/",
+      "verdict": "FOUND",
+      "count": 26,
+      "raw": "  priority prop: 15 hits\n  sizes prop: 11 hits",
+      "details": {
+        "priority_hits": 15,
+        "sizes_hits": 11
+      }
+    }
+  ]
+}
