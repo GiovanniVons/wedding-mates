@@ -117,12 +117,8 @@ export function Header({
       >
         <a href="/" aria-label="Wedding Mates home" className="link-plain inline-flex">
           <Logo
-            color={
-              isSolid ? "var(--color-grape)" : "var(--color-page)"
-            }
-            counterFill={
-              isSolid ? "var(--color-page)" : "var(--color-grape)"
-            }
+            color={isSolid ? "var(--color-grape)" : "var(--color-page)"}
+            counterFill="transparent"
             width={140}
           />
         </a>
@@ -216,7 +212,7 @@ export function Header({
               <div className="mb-[var(--space-6)] flex items-center justify-between">
                 <Logo
                   color="var(--color-page)"
-                  counterFill="var(--color-grape)"
+                  counterFill="transparent"
                   width={130}
                 />
                 <button

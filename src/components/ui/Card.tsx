@@ -71,7 +71,13 @@ export function StepCard({
 }: StepCardProps) {
   const color = NUMERAL_COLOR[(index - 1) % NUMERAL_COLOR.length];
   return (
-    <Card interactive className="relative flex flex-col overflow-hidden">
+    // h-full so every card fills its (stretched) grid cell -> all four are the
+    // same height regardless of title/body length. Roomier padding for air.
+    <Card
+      interactive
+      className="relative flex h-full flex-col overflow-hidden"
+      style={{ padding: "var(--space-6)" }}
+    >
       {/* Oversized poster numeral: a top-right watermark, pinned inside the card
           with overflow-hidden clipping the bleed. Sits behind content, low
           opacity, never overlaps the readable copy (content is relative + has
@@ -80,8 +86,8 @@ export function StepCard({
         aria-hidden="true"
         className="pointer-events-none absolute select-none"
         style={{
-          top: "calc(var(--space-4) * -1)",
-          right: "calc(var(--space-3) * -1)",
+          top: "calc(var(--space-5) * -1)",
+          right: "calc(var(--space-4) * -1)",
           fontFamily: "var(--font-display)",
           fontSize: "clamp(4.5rem, 7vw, 6.5rem)",
           lineHeight: 0.8,
@@ -91,7 +97,7 @@ export function StepCard({
       >
         {numeral}
       </span>
-      <div className="relative flex flex-col">
+      <div className="relative flex h-full flex-col">
         {iconSrc && (
           <span
             className="inline-flex items-center justify-center"
@@ -120,12 +126,16 @@ export function StepCard({
         >
           {numeral}
         </span>
+        {/* Reserve two lines of title height so the body copy starts at the same
+            Y across the row (aligned title/description zones). */}
         <h3
           className="h3"
           style={{
             margin: 0,
             marginBottom: "var(--gap-title-body)",
             color: "var(--theme-heading)",
+            minHeight:
+              "calc(var(--font-size-h3) * var(--line-height-medium) * 3)",
           }}
         >
           {title}

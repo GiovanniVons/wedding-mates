@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Chip, type ChipVariant } from "./Chip";
@@ -87,11 +87,6 @@ export function HypeLine({
 
   const lineClass = scale === "hero" ? "hype-hero" : "hype";
 
-  // The hit word renders at --theme-text until the flip, then --theme-heading-accent.
-  const hitColor = revealed
-    ? "var(--theme-heading-accent)"
-    : "var(--theme-text)";
-
   const containerVariants = {
     hidden: {},
     show: {
@@ -168,6 +163,10 @@ export function HypeLine({
           }}
         >
           {segments.map((seg, i) => {
+            // The held-beat breath-mark: a deliberate pause-mark from the
+            // marked-up-script concept (where the script says to hold). Set with
+            // room + weight + a slight raise so it reads as placed, not a stray
+            // divider dot.
             if (seg.beat) {
               return (
                 <span
@@ -175,30 +174,68 @@ export function HypeLine({
                   aria-hidden="true"
                   style={{
                     color: "var(--theme-text-muted)",
-                    marginInline: "var(--space-3)",
+                    marginInline: "var(--space-4)",
+                    fontWeight: "var(--font-weight-bold)",
                     display: "inline-block",
+                    transform: "translateY(-0.14em)",
                   }}
                 >
                   &middot;
                 </span>
               );
             }
+
+            const trailingSpace =
+              i < segments.length - 1 && !segments[i + 1]?.beat ? " " : "";
+
+            // The hit word: a coral marker highlight sweeps left-to-right behind
+            // the word on the third beat, like marking up a ceremony script. The
+            // word keeps the line colour on top (grape on light, page-white on
+            // grape), both AA-safe over coral at display scale. Reduced motion
+            // renders the full mark instantly.
+            if (seg.hit) {
+              return (
+                <Fragment key={i}>
+                  <span
+                    style={{
+                      position: "relative",
+                      display: "inline-block",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    <motion.span
+                      aria-hidden="true"
+                      style={{
+                        position: "absolute",
+                        left: "-0.06em",
+                        right: "-0.06em",
+                        top: "0.16em",
+                        bottom: "0.12em",
+                        backgroundColor: "var(--theme-heading-accent)",
+                        transformOrigin: "left center",
+                        borderRadius: "var(--radius-small)",
+                        zIndex: 0,
+                      }}
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: revealed ? 1 : 0 }}
+                      transition={{
+                        duration: reduceMotion ? 0 : 0.42,
+                        ease: [0.7, 0, 0.3, 1],
+                      }}
+                    />
+                    <span style={{ position: "relative", zIndex: 1 }}>
+                      {seg.text}
+                    </span>
+                  </span>
+                  {trailingSpace}
+                </Fragment>
+              );
+            }
+
             return (
-              <span
-                key={i}
-                style={
-                  seg.hit
-                    ? {
-                        color: hitColor,
-                        transition: "color var(--motion-duration-fast) ease",
-                      }
-                    : undefined
-                }
-              >
+              <span key={i}>
                 {seg.text}
-                {i < segments.length - 1 && !seg.beat && !segments[i + 1]?.beat
-                  ? " "
-                  : ""}
+                {trailingSpace}
               </span>
             );
           })}

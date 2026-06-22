@@ -1,13 +1,16 @@
 /**
  * Logo -- the Wedding Mates wordmark as inline SVG. The body fills with
- * `color` (currentColor) so it adapts per surface (grape on light chrome,
- * page-white on the grape drawer/footer). The counter shapes use a contrasting
- * fill passed via `counterFill` so the two-tone mark reads on either ground.
+ * `color` so it adapts per surface (grape on light chrome, page-white on the
+ * grape drawer/footer). The counters (letter holes) default to TRANSPARENT so
+ * the actual background shows through and the mark reads consistently as a
+ * single colour on any ground -- it does not appear to shift brightness when a
+ * header gains a translucent blur on scroll. Pass a `counterFill` only if a
+ * deliberate two-tone is wanted.
  */
 interface LogoProps {
   /** Main stroke colour token, e.g. var(--color-grape) or var(--color-page). */
   color?: string;
-  /** Counter (hole) colour, contrasts with `color`. */
+  /** Counter (hole) colour. Default "transparent" (background shows through). */
   counterFill?: string;
   width?: number;
   className?: string;
@@ -16,7 +19,7 @@ interface LogoProps {
 
 export function Logo({
   color = "var(--color-grape)",
-  counterFill = "var(--color-page)",
+  counterFill = "transparent",
   width = 156,
   className,
   title = "Wedding Mates",
