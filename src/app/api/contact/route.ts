@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
 
   const html = `
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#2b1a4a;">
-      <p style="margin:0 0 16px;"><strong>New message from the Let's Get Wed contact form.</strong></p>
+      <p style="margin:0 0 16px;"><strong>New message from the Wedding Mates contact form.</strong></p>
       <p style="margin:0 0 8px;"><strong>Name:</strong> ${safeName}</p>
       <p style="margin:0 0 8px;"><strong>Email:</strong> <a href="mailto:${safeEmail}" style="color:#d63a2e;font-weight:bold;">${safeEmail}</a></p>
       <p style="margin:16px 0 4px;"><strong>Message:</strong></p>
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
     </div>
   `.trim();
 
-  const text = `New message from the Let's Get Wed contact form.\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+  const text = `New message from the Wedding Mates contact form.\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
 
   try {
     const { error } = await resend.emails.send({

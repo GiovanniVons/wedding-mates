@@ -1,17 +1,16 @@
-# Netlify config for the Wedding Mates Next.js 16 app (SSR + API routes).
-# IMPORTANT: this is NOT a static export. The site needs a server runtime for
-# the Stripe webhook (api/stripe/webhook), the Supabase service-role routes, and
-# the gated/auth pages. Do not add `output: 'export'` to next.config.ts.
+# Netlify config for the Wedding Mates Next.js 16 app.
+# Netlify natively supports Next.js 16 with ZERO configuration (it auto-detects
+# Next and runs the App Router + route handlers as serverless functions via its
+# OpenNext-based runtime). No plugin block is needed. This file just pins the
+# build command and documents the one hard rule.
+#
+# HARD RULE: this is a SERVER app, not a static export. The Stripe webhook
+# (api/stripe/webhook), the Supabase service-role routes, and the gated/auth
+# pages all need the server runtime. Do NOT add `output: 'export'` to
+# next.config.ts.
+#
+# All env vars are set in the Netlify UI (Site configuration -> Environment
+# variables), never here. See docs/DEPLOY.md for the full checklist.
 
 [build]
   command = "npm run build"
-
-# The Netlify Next.js runtime turns the App Router + route handlers into
-# serverless/edge functions. Confirm the installed runtime supports Next 16
-# (it is very new); if the build fails on the Next version, either pin the
-# runtime or deploy to Vercel (zero-config for Next). See docs/DEPLOY.md.
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-
-# All env vars are set in the Netlify UI (Site settings -> Environment), NOT here
-# (never commit secrets). See the checklist in docs/DEPLOY.md.

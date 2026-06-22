@@ -2,14 +2,11 @@
 
 The repo (`github.com/GiovanniVons/wedding-mates`) is deploy-ready: server runtime, no static export, the Stripe webhook is a Node serverless route. This guide gets it live on a real domain.
 
-## Host choice (read first)
+## Host: Netlify via GitHub (chosen)
 
-This is a **payment app on Next.js 16**, so the host must run Next as a **server** (serverless functions), not a static export. Two good options:
+Deploying to **Netlify**, auto-building on push to `main`. Netlify natively supports **Next.js 16 with zero config** (it auto-detects Next and runs the App Router + route handlers as serverless functions via its OpenNext-based runtime). The build is on Next 16.2.9, past the 16.2.6 security patch Netlify recommends, so there is no version issue. `netlify.toml` just pins the build command.
 
-- **Vercel (recommended for this app).** First-party Next.js host, zero-config, native Next 16 + App Router + route handlers. The Stripe webhook (raw body, Node runtime) and Supabase service-role routes "just work." Lowest risk for the payment path.
-- **Netlify (agency standard).** Works via the Next.js runtime (`@netlify/plugin-nextjs`, wired in `netlify.toml`). Verify the installed runtime supports **Next 16** (it is very new); if the build errors on the Next version, pin the runtime or switch to Vercel.
-
-Either way: **do not** add `output: 'export'` to `next.config.ts` — that would break the webhook, auth, and the gated course.
+> Do NOT add `output: 'export'` to `next.config.ts` -- that would break the Stripe webhook, auth, and the gated course. (Vercel is a drop-in alternative if ever needed: import the repo, set the same env vars, zero-config.)
 
 ## Environment variables (set in the host dashboard, never in the repo)
 

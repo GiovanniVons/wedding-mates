@@ -16,7 +16,7 @@ import {
 import { PRICING_INCLUSIONS, EXTRAS, TESTIMONIALS } from "@/content/copy";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Friend Led Wedding, One Price: $950 | Let's Get Wed",
+  title: "Friend Led Wedding, One Price: $950 | Wedding Mates",
   description:
     "One $950 package: the Blueprint course that trains your mate, the legals handled by a registered celebrant, plus optional extras. See exactly what is included.",
   path: "/pricing",

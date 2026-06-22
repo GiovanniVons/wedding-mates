@@ -11,7 +11,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: "Friend Led Wedding Ceremonies | Let's Get Wed",
+    default: "Friend Led Wedding Ceremonies | Wedding Mates",
     template: "%s | Wedding Mates",
   },
   description:

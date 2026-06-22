@@ -18,7 +18,7 @@ import { CONTENT_FLAGS, SITE } from "@/lib/site";
  * cancellation policy lives on its own gated route at /refund.
  */
 export const metadata: Metadata = pageMetadata({
-  title: "Terms and Conditions | Let's Get Wed",
+  title: "Terms and Conditions | Wedding Mates",
   description:
     "The terms and conditions for Wedding Mates bookings and the Blueprint course.",
   path: "/terms",

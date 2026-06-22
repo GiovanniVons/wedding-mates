@@ -11,7 +11,7 @@ import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { JsonLd, courseSchema } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Can My Friend Be My Celebrant? | Let's Get Wed",
+  title: "Can My Friend Be My Celebrant? | Wedding Mates",
   description:
     "Yes, your mate can lead your ceremony. We train them with the Blueprint course and a registered celebrant takes care of the legal paperwork. See how it works.",
   path: "/how-it-works",

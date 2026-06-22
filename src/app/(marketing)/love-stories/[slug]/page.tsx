@@ -34,8 +34,8 @@ export async function generateMetadata(props: {
     : undefined;
   return pageMetadata({
     title: story
-      ? `${story.couple}, A Friend Led Wedding | Let's Get Wed`
-      : "Love story not found | Let's Get Wed",
+      ? `${story.couple}, A Friend Led Wedding | Wedding Mates`
+      : "Love story not found | Wedding Mates",
     description: story
       ? `${story.couple} were married by the person who knows them best. See their friend led ceremony.`
       : "This love story could not be found.",

@@ -73,7 +73,7 @@ export function personSchema() {
     jobTitle: "Registered Marriage Celebrant and Founder",
     worksFor: { "@id": ORG_ID },
     description:
-      "Sarah is a Commonwealth-registered marriage celebrant who founded Let's Get Wed after training over 300 hours to marry her own best friend in 2019.",
+      "Sarah is a Commonwealth-registered marriage celebrant who founded Wedding Mates after training over 300 hours to marry her own best friend in 2019.",
     knowsAbout: ["marriage celebrancy", "wedding ceremony coaching"],
   };
 }

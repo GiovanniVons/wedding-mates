@@ -22,7 +22,7 @@ import { TESTIMONIALS, LOVE_STORIES } from "@/content/copy";
  * schema automatically; the empty state shows only while both arrays are empty.
  */
 export const metadata: Metadata = pageMetadata({
-  title: "Real Friend Led Wedding Stories | Let's Get Wed",
+  title: "Real Friend Led Wedding Stories | Wedding Mates",
   description:
     "Couples and the mates who married them share how a friend led ceremony felt more personal than a stranger ever could.",
   path: "/reviews",

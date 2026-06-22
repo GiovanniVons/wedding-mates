@@ -3,17 +3,17 @@
  * JSON-LD, the sitemap, robots, and the footer. Contact data comes from the
  * client-dossier Developer Quick Reference; never fabricated.
  *
- * Brand-name decision (carried from page-copy.md and seo.md): the visible
- * public name is "Wedding Mates"; "Let's Get Wed" is the consistent alias that
- * owns the domain, the email and the SEO meta titles. Schema `name` follows the
- * seo.md entity-consolidation recommendation ("Let's Get Wed") with
- * `alternateName` "Wedding Mates".
+ * Brand-name decision (client-confirmed 2026-06-22): the brand name is
+ * "Wedding Mates" everywhere -- schema `name`, meta titles, and chrome. "Let's
+ * Get Wed" is the alias that owns the domain (letsgetwed.com.au) and the email;
+ * it is kept as `alternateName` so the entity still reconciles with the domain
+ * for search and LLM surfaces.
  */
 
 export const SITE = {
   url: "https://letsgetwed.com.au",
-  name: "Let's Get Wed",
-  alternateName: "Wedding Mates",
+  name: "Wedding Mates",
+  alternateName: "Let's Get Wed",
   /** The visible brand name used in copy and chrome. */
   visibleName: "Wedding Mates",
   email: "sarah@letsgetwed.com.au",
@@ -29,7 +29,7 @@ export const SITE = {
 
 /** The canonical entity statement (verbatim from seo.md), reused in schema. */
 export const ENTITY_STATEMENT =
-  "Let's Get Wed (Wedding Mates) is an Australian wedding business that trains a couple's chosen friend, sibling or parent to lead their wedding ceremony, while a Commonwealth-registered marriage celebrant handles the legal solemnisation and paperwork. The core offer is one $950 package that includes The Wedding Ceremony Blueprint, an eight-module online course that teaches the chosen person to interview the couple, write their love story, structure and deliver the ceremony, plus an onboarding call, templates, a readings library, and the legal requirements managed by a registered celebrant. It was founded by Sarah, a registered marriage celebrant, after she trained to marry her own best friend in 2019. It serves couples across Australia.";
+  "Wedding Mates (also trading as Let's Get Wed) is an Australian wedding business that trains a couple's chosen friend, sibling or parent to lead their wedding ceremony, while a Commonwealth-registered marriage celebrant handles the legal solemnisation and paperwork. The core offer is one $950 package that includes The Wedding Ceremony Blueprint, an eight-module online course that teaches the chosen person to interview the couple, write their love story, structure and deliver the ceremony, plus an onboarding call, templates, a readings library, and the legal requirements managed by a registered celebrant. It was founded by Sarah, a registered marriage celebrant, after she trained to marry her own best friend in 2019. It serves couples across Australia.";
 
 /**
  * Content gates. A conditional route ships as an honest empty-state shell but is

@@ -11,7 +11,7 @@ import { JsonLd, faqSchema } from "@/components/seo/JsonLd";
 import { FAQ_GROUPS, ALL_FAQ_ITEMS } from "@/content/copy";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Friend Led Wedding FAQ | Let's Get Wed",
+  title: "Friend Led Wedding FAQ | Wedding Mates",
   description:
     "Your questions answered: how a friend led ceremony works in Australia, who handles the legals, the cost, and what your mate actually has to do.",
   path: "/faq",

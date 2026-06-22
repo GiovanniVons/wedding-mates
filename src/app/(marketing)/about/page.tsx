@@ -10,7 +10,7 @@ import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { JsonLd, personSchema } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Meet Sarah, Our Founder | Let's Get Wed",
+  title: "Meet Sarah, Our Founder | Wedding Mates",
   description:
     "Sarah became a registered celebrant over 300 hours of study to marry her own best friend in 2019, then built the Blueprint so more mates could do the same.",
   path: "/about",

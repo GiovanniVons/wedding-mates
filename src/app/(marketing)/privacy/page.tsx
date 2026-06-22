@@ -17,7 +17,7 @@ import { SITE } from "@/lib/site";
  * each of these. (Captured from the content + legal audit.)
  */
 export const metadata: Metadata = pageMetadata({
-  title: "Privacy Policy | Let's Get Wed",
+  title: "Privacy Policy | Wedding Mates",
   description:
     "How Wedding Mates handles the personal information collected when you book or contact us.",
   path: "/privacy",

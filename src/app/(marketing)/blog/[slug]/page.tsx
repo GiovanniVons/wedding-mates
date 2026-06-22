@@ -36,14 +36,14 @@ export async function generateMetadata(props: {
   const post = CONTENT_FLAGS.blogHasPosts ? getPostBySlug(slug) : undefined;
   if (!post) {
     return pageMetadata({
-      title: "Post not found | Let's Get Wed",
+      title: "Post not found | Wedding Mates",
       description: "This blog post could not be found.",
       path: `/blog/${slug}`,
       noindex: true,
     });
   }
   return pageMetadata({
-    title: `${post.title} | Let's Get Wed`,
+    title: `${post.title} | Wedding Mates`,
     description: post.excerpt,
     path: `/blog/${post.slug}`,
   });

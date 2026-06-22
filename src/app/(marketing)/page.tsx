@@ -22,7 +22,7 @@ import {
 import { getSortedPosts } from "@/content/blog";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Friend Led Wedding Ceremonies | Let's Get Wed",
+  title: "Friend Led Wedding Ceremonies | Wedding Mates",
   description:
     "Have your best mate lead your wedding ceremony while a registered celebrant handles the legals. One package, fully sorted. Book your friend led ceremony today.",
   path: "/",

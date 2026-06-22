@@ -19,7 +19,7 @@ import { getSortedPosts } from "@/content/blog";
  * the sitemap + footer/home links surface, all automatically.
  */
 export const metadata: Metadata = pageMetadata({
-  title: "Wedding Inspiration and Ceremony Tips | Let's Get Wed",
+  title: "Wedding Inspiration and Ceremony Tips | Wedding Mates",
   description:
     "Ideas, scripts and confidence for couples and the mates leading their ceremony, from the team behind the Blueprint course.",
   path: "/blog",

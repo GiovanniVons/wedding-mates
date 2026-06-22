@@ -9,7 +9,7 @@ import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Contact Let's Get Wed | Friend Led Weddings",
+  title: "Contact Wedding Mates | Friend Led Weddings",
   description:
     "Questions about having a friend lead your ceremony? Email sarah@letsgetwed.com.au or message us on WhatsApp. We are happy to help before you book.",
   path: "/contact",

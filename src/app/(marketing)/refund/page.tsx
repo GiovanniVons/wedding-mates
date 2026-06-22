@@ -17,7 +17,7 @@ import { CONTENT_FLAGS, SITE } from "@/lib/site";
  * their lawyer supply the wording.
  */
 export const metadata: Metadata = pageMetadata({
-  title: "Refund and Cancellation Policy | Let's Get Wed",
+  title: "Refund and Cancellation Policy | Wedding Mates",
   description:
     "The refund and cancellation policy for Wedding Mates bookings and the Blueprint course.",
   path: "/refund",
