@@ -199,20 +199,33 @@ export function FeatureCard({
 }
 
 interface PricingCardProps {
-  price: string; // "$950"
+  price: string; // "$1,490"
   heading: string;
   inclusions: string[];
+  /** One-line descriptor under the heading (the tier tagline). */
+  tagline?: string;
+  /** Emphasise this card as the hero tier (coral border + badge). */
+  recommended?: boolean;
+  /** Badge text shown on the recommended card (e.g. "Most couples choose this"). */
+  badge?: string;
+  /** Eyebrow above the price numeral. Defaults to "The package". */
+  priceEyebrow?: string;
   extrasNote?: string;
   children?: React.ReactNode; // the CTA
   imageSrc?: string;
   imageAlt?: string;
 }
 
-/** PricingCard -- the single emphasised package, grape bold border, $950 numeral. */
+/** PricingCard -- an emphasised package card. The hero (recommended) tier gets a
+ *  coral bold border + badge; an anchor tier gets a lighter grape border. */
 export function PricingCard({
   price,
   heading,
   inclusions,
+  tagline,
+  recommended,
+  badge,
+  priceEyebrow = "The package",
   extrasNote,
   children,
   imageSrc,
@@ -220,14 +233,38 @@ export function PricingCard({
 }: PricingCardProps) {
   return (
     <div
-      className="card relative flex flex-col"
+      className="card relative flex h-full flex-col"
       style={{
-        border: "var(--border-width-bold) solid var(--color-grape)",
+        border: recommended
+          ? "var(--border-width-bold) solid var(--color-coral)"
+          : "var(--border-width-main) solid var(--color-grape-o40)",
         borderRadius: "var(--card-radius)",
         padding: "var(--space-6)",
         backgroundColor: "var(--card-bg)",
       }}
     >
+      {recommended && badge && (
+        <span
+          style={{
+            position: "absolute",
+            top: 0,
+            right: "var(--space-5)",
+            transform: "translateY(-50%)",
+            backgroundColor: "var(--color-coral)",
+            color: "var(--color-page)",
+            fontFamily: "var(--font-body)",
+            fontWeight: "var(--font-weight-heavy)",
+            fontSize: "var(--font-size-chip)",
+            textTransform: "uppercase",
+            letterSpacing: "var(--letter-spacing-wide)",
+            padding: "var(--space-1) var(--space-3)",
+            borderRadius: "var(--radius-pill)",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {badge}
+        </span>
+      )}
       {imageSrc && (
         <div
           className="overflow-hidden"
@@ -259,7 +296,7 @@ export function PricingCard({
           marginBottom: "var(--space-1)",
         }}
       >
-        The package
+        {priceEyebrow}
       </span>
       <p
         style={{
@@ -277,12 +314,24 @@ export function PricingCard({
         className="h3"
         style={{
           margin: 0,
-          marginBottom: "var(--gap-title-body)",
+          marginBottom: tagline ? "var(--space-2)" : "var(--gap-title-body)",
           color: "var(--theme-heading)",
         }}
       >
         {heading}
       </h3>
+      {tagline && (
+        <p
+          style={{
+            color: "var(--color-grape-soft)",
+            margin: 0,
+            marginBottom: "var(--gap-title-body)",
+            fontSize: "var(--font-size-text-small)",
+          }}
+        >
+          {tagline}
+        </p>
+      )}
       <ul
         className="flex flex-col"
         style={{
@@ -290,6 +339,7 @@ export function PricingCard({
           padding: 0,
           margin: 0,
           gap: "var(--gap-list-item)",
+          flexGrow: 1,
         }}
       >
         {inclusions.map((item) => (

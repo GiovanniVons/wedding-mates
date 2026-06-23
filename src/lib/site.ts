@@ -29,7 +29,7 @@ export const SITE = {
 
 /** The canonical entity statement (verbatim from seo.md), reused in schema. */
 export const ENTITY_STATEMENT =
-  "Wedding Mates (also trading as Let's Get Wed) is an Australian wedding business that trains a couple's chosen friend, sibling or parent to lead their wedding ceremony, while a Commonwealth-registered marriage celebrant handles the legal solemnisation and paperwork. The core offer is one $950 package that includes The Wedding Ceremony Blueprint, an eight-module online course that teaches the chosen person to interview the couple, write their love story, structure and deliver the ceremony, plus an onboarding call, templates, a readings library, and the legal requirements managed by a registered celebrant. It was founded by Sarah, a registered marriage celebrant, after she trained to marry her own best friend in 2019. It serves couples across Australia.";
+  "Wedding Mates (also trading as Let's Get Wed) is an Australian wedding business that trains a couple's chosen friend, sibling or parent to lead their wedding ceremony, while a Commonwealth-registered marriage celebrant handles the legal solemnisation and paperwork. The offer comes in two packages, from $1,150, both including The Wedding Ceremony Blueprint, an eight-module online course that teaches the chosen person to interview the couple, write their love story, structure and deliver the ceremony, plus an onboarding call, templates, a readings library, and the legal requirements managed by a registered celebrant. It was founded by Sarah, a registered marriage celebrant, after she trained to marry her own best friend in 2019. It serves couples across Australia.";
 
 /**
  * Content gates. A conditional route ships as an honest empty-state shell but is

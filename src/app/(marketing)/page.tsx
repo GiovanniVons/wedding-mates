@@ -28,7 +28,7 @@ export const metadata: Metadata = pageMetadata({
   path: "/",
   ogTitle: "Get wed your way: married by the one who knows you best",
   ogDescription:
-    "Your best mate leads the ceremony, a registered celebrant handles the legals. One $950 package, training and all. Book your friend led ceremony.",
+    "Your best mate leads the ceremony, a registered celebrant handles the legals. Packages from $1,150, training and all. Book your friend led ceremony.",
 });
 
 export default function HomePage() {
@@ -229,7 +229,7 @@ export default function HomePage() {
               cueVariant="loud"
               segments={[
                 { text: "The investment," },
-                { text: "$950", hit: true },
+                { text: "$1,490", hit: true },
                 { text: ". The memories, priceless." },
               ]}
               scale="section"
@@ -238,21 +238,26 @@ export default function HomePage() {
               as="h2"
             />
             <p style={{ color: "var(--color-grape-soft)", marginTop: "var(--space-4)" }}>
-              A friend led wedding ceremony for one price of $950, the Blueprint course
-              and the legals included.
+              The Ceremony, Complete: the Blueprint course, the legals, the rehearsal
+              and the script review, all in. Prefer the essentials? The Ceremony is
+              $1,150.
             </p>
           </ScrollReveal>
           <ScrollReveal y={28}>
             <PricingCard
-              price="$950"
-              heading="All The Good Stuff, In One Package"
+              price="$1,490"
+              priceEyebrow="Most popular"
+              heading="The Ceremony, Complete"
+              tagline="The full done-with-you experience. Most couples choose this."
+              recommended
+              badge="Most couples choose this"
               inclusions={HOME_INCLUSIONS}
-              extrasNote="A few optional extras can be added at booking, no pressure."
+              extrasNote="Optional extras can be added at booking, no pressure."
               imageSrc="/images/wedding-mates-package.jpg"
-              imageAlt="What is included in the $950 Wedding Mates package"
+              imageAlt="What is included in The Ceremony, Complete Wedding Mates package"
             >
               <div className="flex flex-col items-stretch gap-[var(--space-3)] sm:flex-row sm:items-center">
-                <Button as="a" href="/book" variant="primary" size="large" fullWidth>
+                <Button as="a" href="/book?tier=complete" variant="primary" size="large" fullWidth>
                   Book Now
                 </Button>
               </div>
@@ -263,7 +268,7 @@ export default function HomePage() {
                   textAlign: "center",
                 }}
               >
-                <a href="/pricing">See the full pricing</a>
+                <a href="/pricing">Compare both packages</a>
               </p>
             </PricingCard>
           </ScrollReveal>

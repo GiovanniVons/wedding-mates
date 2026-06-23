@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/Button";
 
 /**
- * StickyCtaBar -- persistent mobile overlay, "Book Now · $950" with the price
- * in marigold. LAYOUT CONTRACT: reserves its own --sticky-cta-height via a
+ * StickyCtaBar -- persistent mobile overlay, "Book Now · from $1,150" with the
+ * price in marigold. LAYOUT CONTRACT: reserves its own --sticky-cta-height via a
  * spacer (rendered by the page, not here) so it never overlaps content; bg
  * coral with grape label on light sections, inverts to a grape bar with a
  * page-white label over data-theme="grape" sections (detected by sampling the
@@ -51,7 +51,7 @@ export function StickyCtaBar({
         }}
       >
         Book Now{" "}
-        <span style={{ color: "var(--color-marigold)" }}>&middot; $950</span>
+        <span style={{ color: "var(--color-marigold)" }}>&middot; from $1,150</span>
       </span>
       <Button as="a" href="/book" variant={onGrape ? "primary" : "secondary"} size="small">
         Start

@@ -74,7 +74,7 @@ export function AssetsSection() {
         </div>
         <div className="text-center">
           <span style={{ fontFamily: "var(--font-display)", fontSize: "var(--font-size-h1)", color: "var(--color-coral)", lineHeight: 1 }}>
-            $950
+            $1,490
           </span>
           <span style={{ display: "block", fontSize: "var(--font-size-text-small)", color: "var(--color-grape-soft)", marginTop: "var(--space-2)" }}>
             Poster numeral

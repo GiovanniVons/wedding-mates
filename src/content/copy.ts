@@ -99,21 +99,15 @@ export const HOME_INCLUSIONS: string[] = [
   "Ceremony templates and sample scripts",
   "A readings and music library",
   "Performance and nerves strategies",
+  "A live Zoom rehearsal with your celebrant",
+  "A custom review of your ceremony script",
   "Real human support the whole way",
   "Peace of mind on the day",
 ];
 
-export const PRICING_INCLUSIONS: string[] = [
-  "The Wedding Ceremony Blueprint, eight modules",
-  "Onboarding video call for you and your mate",
-  "Legal paperwork handled by a registered celebrant",
-  "Ceremony templates and sample scripts",
-  "A readings and music library",
-  "Performance and nerves strategies",
-  "Real human support, every step",
-];
-
-/* ── Optional extras (pricing) ── */
+/* ── Optional extras (pricing). The rehearsal and script review are no longer
+   here: they are built into The Ceremony, Complete tier (see lib/stripe/pricing
+   TIERS), not sold as add-ons. ── */
 export const EXTRAS: Extra[] = [
   {
     title: "Official Marriage Certificate",
@@ -126,18 +120,6 @@ export const EXTRAS: Extra[] = [
     price: "$299",
     description:
       "A registered celebrant attends your ceremony in person as backup or to legally officiate.",
-  },
-  {
-    title: "Zoom Rehearsal",
-    price: "$99",
-    description:
-      "A 30-minute rehearsal with your celebrant to review the flow and the delivery.",
-  },
-  {
-    title: "Custom Script Review",
-    price: "$129",
-    description:
-      "We review your ceremony script and suggest improvements to make it shine.",
   },
 ];
 
@@ -161,7 +143,7 @@ export const HOME_FAQ: Faq[] = [
   {
     question: "What does it cost?",
     answer:
-      "One package is $950. That includes the Blueprint course that trains your mate, the onboarding call, the templates and readings, and the legal handling. A few optional extras can be added at booking.",
+      "Two packages. The Ceremony is $1,150, and The Ceremony, Complete is $1,490 and adds a rehearsal and a script review so your mate walks in ready, which is why most couples choose it. Both include the Blueprint course that trains your mate, the onboarding call, the templates and readings, and the legal handling. A couple of optional extras can be added at booking.",
   },
   {
     question: "How far in advance do we need to book?",
@@ -224,17 +206,17 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         question: "What does it cost?",
         answer:
-          "One package is $950, which includes the Blueprint course that trains your mate, the onboarding call, the templates and readings, and the legal handling. There are a few optional extras you can add at booking.",
+          "Two packages. The Ceremony is $1,150 and The Ceremony, Complete is $1,490. Both include the Blueprint course that trains your mate, the onboarding call, the templates and readings, and the legal handling; Complete adds a rehearsal and a script review. A couple of optional extras can be added at booking.",
       },
       {
-        question: "What is included in the $950 package?",
+        question: "What is the difference between the two packages?",
         answer:
-          "The Blueprint course (eight modules of training for your mate), an onboarding video call, templates and sample scripts, a readings and music library, performance strategies, and the legal requirements handled by a registered celebrant.",
+          "The Ceremony ($1,150) gives your mate everything they need to lead the day: the eight-module Blueprint course, the onboarding call, templates and readings, performance strategies, and the legals handled by a registered celebrant. The Ceremony, Complete ($1,490) adds the two things that make sure your mate walks in ready: a live Zoom rehearsal with your celebrant and a custom review of your ceremony script. Most couples choose Complete.",
       },
       {
-        question: "Is this cheaper than a traditional celebrant?",
+        question: "Why have your own person lead instead of a traditional celebrant?",
         answer:
-          "Often, yes. A traditional registered celebrant in Australia typically ranges from roughly $600 to $1,200 or more. Wedding Mates is one $950 package that also trains your own person and handles the legals, so you are not choosing between personal and professional.",
+          "Because the person standing up there matters. A wedding already costs many thousands of dollars to capture and dress the ceremony; this makes the ceremony itself irreplaceable, led by someone who actually knows you, with the legals fully handled by a registered celebrant and your mate trained and ready. You are not choosing between personal and professional. You get both.",
       },
       {
         question: "Do we get a marriage certificate?",
