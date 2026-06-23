@@ -3,7 +3,7 @@
 **Location:** website-projects/client-projects/wedding-mates
 **Phase:** refinement (Phase 4 passed 2026-06-22)
 **Dev Server:** localhost:5067 (build + `next start`, NOT turbopack dev -- the path has spaces)
-**Status:** active -- functionally complete, blocked on client credentials + content for go-live
+**Status:** active -- functionally complete; blocked on client pricing sign-off (two-tier, see docs/pricing-recommendation.md) + service credentials + content for go-live
 
 ---
 
@@ -26,6 +26,10 @@ See `docs/artifacts/file-manifest.md` (routes, components, lib, migrations). Key
 - [ ] None blocking. All Critical/Major resolved.
 
 ## Recent Changes (Change Log)
+### 2026-06-23
+- Pricing restructured from one $950 package to **two tiers** (LLM-council recommendation, both opinions converged): **The Ceremony $1,150** (anchor) + **The Ceremony, Complete $1,490** (hero, recommended). The Zoom rehearsal + Custom Script Review moved OUT of paid add-ons and INTO the Complete tier (they are the failure-prevention core, not upsells). Remaining add-ons: certificate $69, celebrant-in-attendance $299. Prices are PROVISIONAL "founding-couples" rates pending Sarah's sign-off (see `docs/pricing-recommendation.md`); step Complete to ~$1,790 once proof exists.
+- Money path made tier-aware end to end: `lib/stripe/pricing.ts` (TIERS + tier-aware `computeTotal(tier, extras)`), `booking/schema.ts` (tier in payload), checkout + webhook routes, migration 004 (`tier` column, base default 149000), wizard (reads `?tier=`, displays + "Change package"), receipt email. Display swept across home/pricing/faq/terms/sticky-bar/JSON-LD (now an AggregateOffer $1,150-$1,490)/site.ts/course UI/design-book. Build PASS (exit 0), token lint 6/6 clean, runtime-verified on :5067.
+- NOTE: real price NUMBERS still need Sarah's approval; the two-tier STRUCTURE is the council-recommended shape. Guarantee ("mate won't freeze") + credibility-led page deferred to Sarah (operational commitments, flagged in the doc, not auto-added).
 ### 2026-06-22
 - Phase 4 fix pass: images -61% (Sharp), sticky-bar per-surface inversion (geometry detection), hero mobile wrap, a11y (heading-in-label, useId), nav dedup, OG dims verified. Build PASS, audit 21/0.
 - Phase 4 reviews complete (design/qa/performance all PASS WITH NOTES); consolidated-fixes + pitch-brief + ledger finalized.
@@ -33,13 +37,14 @@ See `docs/artifacts/file-manifest.md` (routes, components, lib, migrations). Key
 - Phases 0-3 built end to end. Phase 1 re-aimed from editorial to "Recessional Pop" per user. 2.5 Design Book review + typography/spacing fix pass.
 
 ## Open Questions (for the client)
+- **Pricing approval (NEW, blocks launch):** approve the two-tier prices ($1,150 / $1,490 founding rate) or adjust. Also: does Sarah commit to the "mate won't freeze" rehearsal guarantee, and lead the page with her celebrant credentials? See `docs/pricing-recommendation.md`.
 - Brand-name primary: **Wedding Mates** (current) vs **Let's Get Wed** (matches domain; SEO prefers it). Currently built with Wedding Mates primary.
-- GST: are the $950 + extras GST-inclusive or exclusive? (Affects receipts + T&C.)
+- GST: are the $1,150 / $1,490 packages + extras GST-inclusive or exclusive? (Affects receipts + T&C.)
 - Exact legal mechanism wording (registered celebrant attends-and-officiates vs separate registration) + Sarah's surname + social `sameAs` URLs.
 - Module 5/6 "vows blueprint" download placement (source-doc inconsistency).
 
 ## Next Actions (Phase 5 / launch -- BLOCKED ON CLIENT)
-1. **Supabase:** create a standalone project; paste URL + anon + service-role keys; apply migrations 001-004 (see `supabase/README.md`); set auth redirect URLs + SMTP.
+1. **Supabase:** project is now PROVISIONED (real URL + legacy JWT keys wired into `.env.local`; preview bypass auto-disabled). Remaining: apply migrations 001-004 (now incl. the `tier` column on orders; see `supabase/README.md`), set auth redirect URLs + SMTP, create a real account with active `course_access` to exercise the gate.
 2. **Stripe:** create the account (Sarah's); add TEST keys + webhook secret (`stripe listen --forward-to localhost:5067/api/stripe/webhook`); run the full test-mode booking -> webhook -> entitlement -> email round-trip (the recommended checkpoint); then LIVE keys.
 3. **Resend:** API key + verified `letsgetwed.com.au` sending domain; set `EMAIL_FROM`.
 4. **Content:** the 9 lesson videos; the 2 missing download links (Module 5 vows guide, Module 7 nerves tips); real reviews/love-story photos (+ rights); real blog posts; Terms + refund policy + privacy copy; the onboarding-call URL.

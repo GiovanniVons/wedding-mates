@@ -185,12 +185,12 @@ async function handleCheckoutCompleted(
   }
 
   // --- 4. Trigger the transactional emails -----------------------------------
-  // Re-derive the total from the stored extras keys so the receipt matches what
-  // was charged (single source of truth).
+  // Re-derive the total from the stored tier + extras keys so the receipt
+  // matches what was charged (single source of truth).
   const extraKeys: string[] = Array.isArray(order.extras)
     ? (order.extras as { key?: string }[]).map((e) => e.key ?? "").filter(Boolean)
     : [];
-  const total = computeTotal(extraKeys);
+  const total = computeTotal(order.tier ?? undefined, extraKeys);
 
   const accessUrl = await buildAccessUrl(supabase, email);
 
@@ -269,6 +269,7 @@ interface OrderRow {
   id: string;
   email: string;
   status: string;
+  tier: string | null;
   partner_name: string | null;
   mobile: string | null;
   suburb: string | null;

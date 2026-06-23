@@ -221,13 +221,15 @@ export function RunningTotalBar({
 
 interface OrderSummaryProps {
   base: number;
+  /** Label for the base line (the chosen tier name). Defaults to the package. */
+  baseLabel?: string;
   selected: Extra[];
   /** GST is a flagged placeholder until the client confirms inclusive/exclusive. */
   gstNote?: string;
 }
 
 /** OrderSummary (Step 6) -- base + each extra + total + the flagged GST line. */
-export function OrderSummary({ base, selected, gstNote }: OrderSummaryProps) {
+export function OrderSummary({ base, baseLabel = "Wedding Mates package", selected, gstNote }: OrderSummaryProps) {
   const extrasTotal = selected.reduce((sum, e) => sum + e.price, 0);
   const total = base + extrasTotal;
   return (
@@ -240,7 +242,7 @@ export function OrderSummary({ base, selected, gstNote }: OrderSummaryProps) {
       </h3>
       <dl className="flex flex-col gap-[var(--space-3)]" style={{ margin: 0 }}>
         <div className="flex items-center justify-between">
-          <dt style={{ color: "var(--color-grape-soft)" }}>Wedding Mates package</dt>
+          <dt style={{ color: "var(--color-grape-soft)" }}>{baseLabel}</dt>
           <dd style={{ margin: 0, color: "var(--color-grape)", fontWeight: "var(--font-weight-semibold)" }}>
             ${base}
           </dd>

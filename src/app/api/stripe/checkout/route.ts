@@ -1,11 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import type Stripe from "stripe";
 import { bookingPayloadSchema } from "@/lib/booking/schema";
-import {
-  BASE_AMOUNT_CENTS,
-  CURRENCY,
-  computeTotal,
-} from "@/lib/stripe/pricing";
+import { CURRENCY, computeTotal } from "@/lib/stripe/pricing";
 import { getStripe, isStripeConfigured } from "@/lib/stripe/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { hasRealSupabase } from "@/lib/auth/preview";
@@ -79,7 +75,8 @@ export async function POST(request: NextRequest) {
   const booking = parsed.data;
 
   // --- 2. Recompute the total server-side (never trust the client) -----------
-  const total = computeTotal(booking.extras);
+  // The tier sets the base; the client sends only the tier key + extra keys.
+  const total = computeTotal(booking.tier, booking.extras);
 
   // --- 3. Insert the pending order (service role; bypasses RLS) ---------------
   // Stored extras as a jsonb array of {key,label,amount_cents} so the receipt
@@ -100,7 +97,8 @@ export async function POST(request: NextRequest) {
         .insert({
           email: booking.email,
           status: "pending",
-          base_amount_cents: BASE_AMOUNT_CENTS,
+          tier: total.tier.key,
+          base_amount_cents: total.baseCents,
           extras: extrasJson,
           total_amount_cents: total.totalCents,
           currency: CURRENCY,
@@ -138,10 +136,10 @@ export async function POST(request: NextRequest) {
       quantity: 1,
       price_data: {
         currency: CURRENCY,
-        unit_amount: BASE_AMOUNT_CENTS,
+        unit_amount: total.baseCents,
         product_data: {
-          name: "Wedding Mates package",
-          description: "The Wedding Ceremony Blueprint, onboarding, and the legals handled.",
+          name: total.tier.name,
+          description: total.tier.tagline,
         },
       },
     },

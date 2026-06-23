@@ -96,18 +96,28 @@ export function productSchema(aggregateRating?: object | null) {
     category: "Wedding ceremony service",
     ...(aggregateRating ? { aggregateRating } : {}),
     offers: {
-      "@type": "Offer",
+      "@type": "AggregateOffer",
       priceCurrency: "AUD",
-      price: "950.00",
+      lowPrice: "1150.00",
+      highPrice: "1490.00",
+      offerCount: 2,
       availability: "https://schema.org/InStock",
       url: `${SITE.url}/book`,
       areaServed: { "@type": "Country", name: "Australia" },
       seller: { "@id": ORG_ID },
-      addOn: [
-        { "@type": "Offer", name: "Official Marriage Certificate", price: "69.00", priceCurrency: "AUD" },
-        { "@type": "Offer", name: "Registered Celebrant in Attendance", price: "299.00", priceCurrency: "AUD" },
-        { "@type": "Offer", name: "Zoom Rehearsal with Celebrant", price: "99.00", priceCurrency: "AUD" },
-        { "@type": "Offer", name: "Custom Script Review", price: "129.00", priceCurrency: "AUD" },
+      offers: [
+        { "@type": "Offer", name: "The Ceremony", price: "1150.00", priceCurrency: "AUD", url: `${SITE.url}/book?tier=ceremony` },
+        {
+          "@type": "Offer",
+          name: "The Ceremony, Complete",
+          price: "1490.00",
+          priceCurrency: "AUD",
+          url: `${SITE.url}/book?tier=complete`,
+          addOn: [
+            { "@type": "Offer", name: "Official Marriage Certificate", price: "69.00", priceCurrency: "AUD" },
+            { "@type": "Offer", name: "Registered Celebrant in Attendance", price: "299.00", priceCurrency: "AUD" },
+          ],
+        },
       ],
     },
   };
@@ -129,7 +139,7 @@ export function courseSchema() {
       "@type": "Offer",
       category: "Paid",
       priceCurrency: "AUD",
-      price: "950.00",
+      price: "1150.00",
       url: `${SITE.url}/book`,
     },
     hasCourseInstance: {

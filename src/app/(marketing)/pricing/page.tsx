@@ -13,16 +13,17 @@ import {
   courseSchema,
   aggregateRatingSchema,
 } from "@/components/seo/JsonLd";
-import { PRICING_INCLUSIONS, EXTRAS, TESTIMONIALS } from "@/content/copy";
+import { EXTRAS, TESTIMONIALS } from "@/content/copy";
+import { TIERS, centsToDollars } from "@/lib/stripe/pricing";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Friend Led Wedding, One Price: $950 | Wedding Mates",
+  title: "Friend Led Wedding Packages, From $1,150 | Wedding Mates",
   description:
-    "One $950 package: the Blueprint course that trains your mate, the legals handled by a registered celebrant, plus optional extras. See exactly what is included.",
+    "Two ways to get wed your way: The Ceremony ($1,150) or The Ceremony, Complete ($1,490). The Blueprint course that trains your mate, the legals handled by a registered celebrant, plus optional extras.",
   path: "/pricing",
-  ogTitle: "One price for a friend led wedding ceremony: $950",
+  ogTitle: "Friend led wedding packages, from $1,150",
   ogDescription:
-    "Everything your mate needs to lead your ceremony, plus the legals handled. $950, with optional extras you can add at booking.",
+    "Everything your mate needs to lead your ceremony, plus the legals handled. Two packages from $1,150, with optional extras you can add at booking.",
 });
 
 export default function PricingPage() {
@@ -37,53 +38,54 @@ export default function PricingPage() {
         ]}
       />
 
-      {/* Section 1: The Package */}
+      {/* Section 1: The Packages */}
       <Section space="page-top" spaceBottom="main">
-        <Container width="narrow">
-          <ScrollReveal className="mb-[var(--space-6)] text-center">
+        <Container>
+          <ScrollReveal className="mb-[var(--space-7)] text-center">
             <Chip variant="loud" className="mb-[var(--space-4)]">
               The Investment
             </Chip>
             <h1 style={{ margin: 0, color: "var(--color-grape)" }}>
-              $950. Everything Your Mate Needs.
+              Two Ways To Get Wed Your Way.
             </h1>
             <p
               style={{
                 color: "var(--color-grape-soft)",
                 marginTop: "var(--space-5)",
-                maxWidth: "60ch",
+                maxWidth: "62ch",
                 marginInline: "auto",
               }}
             >
-              A friend led wedding ceremony costs one flat price of $950. That covers
-              the Blueprint course that trains your chosen mate and the legal
-              requirements handled by a registered celebrant. No tiers, no surprises,
-              no per-hour celebrant fees.
+              Both packages train your chosen mate to lead the ceremony and have a
+              registered celebrant handle every legal requirement. Most couples choose
+              The Ceremony, Complete, which adds the rehearsal and script review that
+              make sure your mate walks in ready. Founding-couples pricing while we are
+              new.
             </p>
           </ScrollReveal>
-          <ScrollReveal y={28}>
-            <PricingCard
-              price="$950"
-              heading="Everything Your Mate Needs"
-              inclusions={PRICING_INCLUSIONS}
-            >
-              <Button as="a" href="/book" variant="primary" size="large" fullWidth>
-                Book Now
-              </Button>
-              <p
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "var(--font-size-h3)",
-                  color: "var(--color-grape)",
-                  textTransform: "uppercase",
-                  textAlign: "center",
-                  marginTop: "var(--space-5)",
-                  marginBottom: 0,
-                }}
+          <ScrollReveal y={28} className="grid items-stretch gap-[var(--space-5)] md:grid-cols-2">
+            {TIERS.map((tier) => (
+              <PricingCard
+                key={tier.key}
+                price={`$${centsToDollars(tier.amountCents).toLocaleString("en-AU")}`}
+                priceEyebrow={tier.recommended ? "Most popular" : "The package"}
+                heading={tier.name}
+                tagline={tier.tagline}
+                inclusions={tier.inclusions}
+                recommended={tier.recommended}
+                badge="Most couples choose this"
               >
-                The memories: <span style={{ color: "var(--color-coral-deep)" }}>priceless</span>.
-              </p>
-            </PricingCard>
+                <Button
+                  as="a"
+                  href={`/book?tier=${tier.key}`}
+                  variant={tier.recommended ? "primary" : "secondary"}
+                  size="large"
+                  fullWidth
+                >
+                  Book {tier.name}
+                </Button>
+              </PricingCard>
+            ))}
           </ScrollReveal>
         </Container>
       </Section>

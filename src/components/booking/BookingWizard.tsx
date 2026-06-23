@@ -18,10 +18,13 @@ import { BookingHeader } from "@/components/layout/BookingHeader";
 import { BOOKING_COPY } from "@/content/booking";
 import {
   EXTRAS,
-  BASE_AMOUNT_CENTS,
+  DEFAULT_TIER,
+  resolveTier,
+  isTierKey,
   centsToDollars,
   computeTotal,
   type ExtraKey,
+  type TierKey,
 } from "@/lib/stripe/pricing";
 import {
   celebrantStepSchema,
@@ -32,6 +35,7 @@ import {
 /* ------------------------------------------------------------------ state */
 
 interface BookingState {
+  tier: TierKey;
   weddingDate: string;
   fullName: string;
   partnerName: string;
@@ -48,6 +52,7 @@ interface BookingState {
 }
 
 const EMPTY: BookingState = {
+  tier: DEFAULT_TIER,
   weddingDate: "",
   fullName: "",
   partnerName: "",
@@ -74,8 +79,6 @@ const EXTRA_CARDS: Extra[] = EXTRAS.map((e) => ({
   price: centsToDollars(e.amountCents),
   description: e.description,
 }));
-
-const BASE_DOLLARS = centsToDollars(BASE_AMOUNT_CENTS);
 
 /** True when the wedding date is less than 4 weeks (28 days) from today. */
 function isWithinFourWeeks(dateStr: string): boolean {
@@ -110,15 +113,27 @@ export function BookingWizard() {
   const [hydrated, setHydrated] = useState(false);
   const liveRef = useRef<HTMLDivElement>(null);
 
-  // --- Restore the draft from sessionStorage on mount ------------------------
+  // --- Restore the draft + resolve the tier on mount -------------------------
+  // Tier precedence: a valid ?tier= in the URL (a tier card was clicked) wins,
+  // then the saved draft, then the default (hero) tier.
   useEffect(() => {
+    let draft: Partial<BookingState> = {};
     try {
       const raw = sessionStorage.getItem(STORAGE_KEY);
-      if (raw) setData({ ...EMPTY, ...(JSON.parse(raw) as Partial<BookingState>) });
+      if (raw) draft = JSON.parse(raw) as Partial<BookingState>;
     } catch {
       // ignore malformed draft
     }
+    const urlTier = searchParams.get("tier");
+    const tier: TierKey =
+      urlTier && isTierKey(urlTier)
+        ? urlTier
+        : draft.tier && isTierKey(draft.tier)
+          ? draft.tier
+          : DEFAULT_TIER;
+    setData({ ...EMPTY, ...draft, tier });
     setHydrated(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // --- Persist on every change (shareable/recoverable per ux.md) -------------
@@ -157,7 +172,12 @@ export function BookingWizard() {
     [router, searchParams],
   );
 
-  const total = useMemo(() => computeTotal(data.extras), [data.extras]);
+  const selectedTier = resolveTier(data.tier);
+  const baseDollars = centsToDollars(selectedTier.amountCents);
+  const total = useMemo(
+    () => computeTotal(data.tier, data.extras),
+    [data.tier, data.extras],
+  );
   const extrasDollars = centsToDollars(total.extrasCents);
   const totalDollars = centsToDollars(total.totalCents);
 
@@ -234,6 +254,7 @@ export function BookingWizard() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          tier: data.tier,
           weddingDate: data.weddingDate,
           fullName: data.fullName,
           partnerName: data.partnerName,
@@ -549,7 +570,7 @@ export function BookingWizard() {
                         color: "var(--color-grape)",
                       }}
                     >
-                      Base ${BASE_DOLLARS}
+                      {selectedTier.name} ${baseDollars}
                       {extrasDollars > 0 ? ` + extras $${extrasDollars}` : ""} = ${totalDollars}
                     </p>
                     <StepActions
@@ -575,12 +596,19 @@ export function BookingWizard() {
                       </p>
                     )}
                     <OrderSummary
-                      base={BASE_DOLLARS}
+                      base={baseDollars}
+                      baseLabel={selectedTier.name}
                       selected={EXTRA_CARDS.filter((e) =>
                         data.extras.includes(e.id as ExtraKey),
                       )}
                       gstNote={BOOKING_COPY.step6.gstNote}
                     />
+                    <p
+                      className="mt-[var(--space-3)] text-center"
+                      style={{ fontSize: "var(--font-size-text-small)", margin: "var(--space-3) 0 0" }}
+                    >
+                      <a href="/pricing">Change package</a>
+                    </p>
 
                     {notConfigured && (
                       <div
@@ -652,7 +680,7 @@ export function BookingWizard() {
 
       {/* Mobile sticky running total -- only on the extras step. */}
       {step === 5 && (
-        <RunningTotalBar base={BASE_DOLLARS} extrasTotal={extrasDollars} variant="sticky" />
+        <RunningTotalBar base={baseDollars} extrasTotal={extrasDollars} variant="sticky" />
       )}
     </div>
   );

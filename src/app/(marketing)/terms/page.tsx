@@ -33,8 +33,8 @@ const TERMS_SECTIONS: LegalSection[] = [
   },
   {
     heading: "2. What you are buying",
-    body: "The $950 package: Blueprint course access, the onboarding call, ceremony templates and readings, and the registered-celebrant legal handling.",
-    supply: "Confirm the exact inclusions wording for the package scope.",
+    body: "One of two packages: The Ceremony ($1,150) or The Ceremony, Complete ($1,490). Both include Blueprint course access, the onboarding call, ceremony templates and readings, and the registered-celebrant legal handling; Complete adds a rehearsal and a script review.",
+    supply: "Confirm the exact inclusions wording for each package tier.",
   },
   {
     heading: "3. The legal marriage and the celebrant role",
@@ -49,7 +49,7 @@ const TERMS_SECTIONS: LegalSection[] = [
   },
   {
     heading: "5. Booking, payment and GST",
-    body: "The $950 package plus the four optional extras ($69, $299, $99, $129).",
+    body: "The chosen package ($1,150 or $1,490) plus the two optional extras ($69 certificate, $299 celebrant in attendance).",
     supply:
       "Confirm whether prices are GST inclusive or exclusive, then state the GST position plainly here (and on /pricing and the booking summary). Do not assert a tax status until confirmed.",
   },

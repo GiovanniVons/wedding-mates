@@ -8,8 +8,9 @@
     - Depends on 001 (profiles, order_status enum, is_admin()).
 
   2. New Table
-    - orders -- one row per booking. Base package is $950 AUD (95000 cents);
-      extras are stored as jsonb and rolled into total_amount_cents.
+    - orders -- one row per booking. `tier` selects the base price (The Ceremony
+      $1,150 = 115000c, or The Ceremony, Complete $1,490 = 149000c); extras are
+      stored as jsonb and rolled into total_amount_cents.
 
   3. Security
     - RLS: a signed-in user reads their own orders (matched by user_id). Admins
@@ -24,7 +25,8 @@ CREATE TABLE IF NOT EXISTS orders (
   user_id             uuid REFERENCES profiles (id) ON DELETE SET NULL,
   email               text NOT NULL,
   status              order_status NOT NULL DEFAULT 'pending',
-  base_amount_cents   integer NOT NULL DEFAULT 95000,
+  tier                text NOT NULL DEFAULT 'complete',
+  base_amount_cents   integer NOT NULL DEFAULT 149000,
   extras              jsonb NOT NULL DEFAULT '[]'::jsonb,
   total_amount_cents  integer,
   currency            text NOT NULL DEFAULT 'aud',
@@ -63,5 +65,6 @@ BEGIN
 END $$;
 
 COMMENT ON TABLE orders IS 'Booking + payment record. Writes via service role (Stripe webhook). User reads own.';
-COMMENT ON COLUMN orders.base_amount_cents IS 'Base Wedding Mates package, $950 AUD = 95000 cents.';
+COMMENT ON COLUMN orders.tier IS 'Selected package tier: ceremony ($1,150) or complete ($1,490). Sets base_amount_cents.';
+COMMENT ON COLUMN orders.base_amount_cents IS 'Base price for the chosen tier in cents (115000 or 149000).';
 COMMENT ON COLUMN orders.extras IS 'Selected paid extras as jsonb array (label + amount_cents).';

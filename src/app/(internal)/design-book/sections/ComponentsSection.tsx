@@ -50,8 +50,6 @@ const BUTTON_SIZES: ButtonSize[] = ["small", "medium", "large"];
 const EXTRAS: Extra[] = [
   { id: "cert", name: "Printed certificate", price: 69, description: "A keepsake copy of your ceremony certificate, posted to you." },
   { id: "attend", name: "Celebrant in attendance", price: 299, description: "A registered celebrant on site on the day for total peace of mind." },
-  { id: "zoom", name: "Zoom rehearsal", price: 99, description: "A live run-through with Sarah so your mate walks in ready." },
-  { id: "review", name: "Script review", price: 129, description: "Sarah reads your mate's script and sends notes before the day." },
 ];
 
 const MODULE_TREE: ModuleTreeItem[] = [
@@ -65,12 +63,12 @@ const MODULE_TREE: ModuleTreeItem[] = [
 const FAQ_ITEMS = [
   { question: "Is a friend led wedding actually legal?", answer: "Yes. A registered celebrant takes care of the legal paperwork and requirements before the day, so your mate can lead the ceremony and you are fully, properly married." },
   { question: "Can my friend really pull this off?", answer: "They were asked because you trust them. The Blueprint course teaches them how to interview you, write your story, and deliver it with calm hands, and Sarah is one message away the whole time." },
-  { question: "What does the $950 package include?", answer: "The full Blueprint course for your mate, the legal solemnisation handled by a registered celebrant, and support from Sarah throughout. Optional extras can be added at booking." },
+  { question: "What does The Ceremony, Complete package include?", answer: "The full Blueprint course for your mate, a rehearsal and a script review, the legal solemnisation handled by a registered celebrant, and support from Sarah throughout. Optional extras can be added at booking." },
 ];
 
 export function ComponentsSection() {
   const [checkedExtras, setCheckedExtras] = useState<Record<string, boolean>>({
-    zoom: true,
+    attend: true,
   });
   const selected = EXTRAS.filter((e) => checkedExtras[e.id]);
   const extrasTotal = selected.reduce((s, e) => s + e.price, 0);
@@ -276,9 +274,12 @@ export function ComponentsSection() {
       <span className="meta-caps" style={{ color: "var(--color-grape-soft)", display: "block", margin: "var(--space-5) 0 var(--space-3)" }}>Pricing card · Module card · Love-story card (with honest empty state)</span>
       <div className="grid grid-cols-1 gap-[var(--space-5)] lg:grid-cols-3">
         <PricingCard
-          price="$950"
-          heading="Everything your mate needs"
-          inclusions={["The full Blueprint course", "Legals handled by a registered celebrant", "Support from Sarah throughout", "A ceremony in a voice you love"]}
+          price="$1,490"
+          recommended
+          badge="Most couples choose this"
+          heading="The Ceremony, Complete"
+          tagline="The full done-with-you experience."
+          inclusions={["The full Blueprint course", "A rehearsal and a script review", "Legals handled by a registered celebrant", "A ceremony in a voice you love"]}
           extrasNote="Optional extras can be added at booking."
           imageSrc="/images/wedding-mates-package.jpg"
           imageAlt="The Wedding Mates package"
@@ -404,8 +405,8 @@ export function ComponentsSection() {
           ))}
         </div>
         <div className="flex flex-col gap-[var(--space-4)]">
-          <RunningTotalBar base={950} extrasTotal={extrasTotal} variant="rail" />
-          <OrderSummary base={950} selected={selected} gstNote="GST treatment to be confirmed by the client (inclusive vs exclusive)." />
+          <RunningTotalBar base={1490} extrasTotal={extrasTotal} variant="rail" />
+          <OrderSummary base={1490} baseLabel="The Ceremony, Complete" selected={selected} gstNote="GST treatment to be confirmed by the client (inclusive vs exclusive)." />
         </div>
       </div>
       <span className="meta-caps" style={{ color: "var(--color-grape-soft)", display: "block", margin: "var(--space-5) 0 var(--space-3)" }}>
@@ -415,10 +416,10 @@ export function ComponentsSection() {
         <div style={{ position: "absolute", inset: 0 }} className="[&>div]:!static [&>div]:!block">
           <div data-theme="grape" style={{ minHeight: "var(--total-bar-height)", backgroundColor: "var(--total-bar-bg)", color: "var(--total-bar-text)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--space-3)", paddingInline: "var(--site-margin)" }}>
             <span style={{ fontSize: "var(--font-size-text-small)", color: "var(--total-bar-text)" }}>
-              Base $950 {extrasTotal > 0 ? `+ extras $${extrasTotal}` : ""}
+              Base $1,490 {extrasTotal > 0 ? `+ extras $${extrasTotal}` : ""}
             </span>
             <span style={{ fontFamily: "var(--font-display)", fontSize: "var(--font-size-h3)", color: "var(--total-bar-accent)", lineHeight: 1 }}>
-              ${950 + extrasTotal}
+              ${1490 + extrasTotal}
             </span>
           </div>
         </div>

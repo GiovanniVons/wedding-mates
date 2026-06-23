@@ -129,7 +129,7 @@ ${button("Open your course", ctx.accessUrl)}
  * ===================================================================== */
 export function receiptEmail(ctx: EmailContext): RenderedEmail {
   const lines: ReceiptLine[] = [
-    { label: "Wedding Mates package", amountDollars: centsToDollars(ctx.total.baseCents) },
+    { label: ctx.total.tier.name, amountDollars: centsToDollars(ctx.total.baseCents) },
     ...ctx.total.extras.map((e) => ({
       label: e.name,
       amountDollars: centsToDollars(e.amountCents),

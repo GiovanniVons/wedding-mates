@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { EXTRAS, type ExtraKey } from "@/lib/stripe/pricing";
+import { EXTRAS, TIER_KEYS, type ExtraKey } from "@/lib/stripe/pricing";
 
 /**
  * schema.ts -- the booking wizard validation, modelled on the auth schemas
@@ -69,12 +69,16 @@ export const extrasStepSchema = z.object({
   extras: z.array(z.enum(EXTRA_KEYS)).default([]),
 });
 
+/** Tier (chosen on the pricing page, carried as ?tier= and in the payload). */
+export const tierSchema = z.enum(TIER_KEYS).default("complete");
+
 /**
  * The full booking payload POSTed to /api/stripe/checkout. The server validates
  * this, recomputes the total from the keys, and inserts the orders row. Note the
  * absence of any price/total field: amounts are server-derived only.
  */
 export const bookingPayloadSchema = z.object({
+  tier: tierSchema,
   weddingDate: dateStepSchema.shape.weddingDate,
   fullName: detailsStepSchema.shape.fullName,
   partnerName: detailsStepSchema.shape.partnerName,

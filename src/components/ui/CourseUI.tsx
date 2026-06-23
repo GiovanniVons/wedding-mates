@@ -461,7 +461,7 @@ export function LockedState() {
         Your course is waiting
       </h1>
       <p className="text-large mt-[var(--space-3)]" style={{ color: "var(--color-grape-soft)", maxWidth: "46ch" }}>
-        Course access comes with the $950 Wedding Mates booking. Once the couple
+        Course access comes with your Wedding Mates booking. Once the couple
         books, your login and the full Blueprint land in your inbox.
       </p>
       <div className="mt-[var(--space-5)] flex flex-col items-center gap-[var(--space-3)] sm:flex-row">
