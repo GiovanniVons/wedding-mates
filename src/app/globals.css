@@ -258,6 +258,24 @@
     background-color: var(--color-page-tint);
     cursor: not-allowed;
   }
+  /* iOS Safari sizes input[type=date] to its own content and ignores
+     width:100%, overflowing narrow screens (and forcing horizontal scroll on
+     the whole wizard). Reset the native appearance so it honours the field
+     width; min-width:0 lets it shrink, and the value/indicator are pinned so
+     the calendar picker stays usable. Scoped to date only so the select keeps
+     its native dropdown arrow. */
+  .field-input[type="date"] {
+    -webkit-appearance: none;
+    appearance: none;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .field-input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
+  }
+  .field-input[type="date"]::-webkit-calendar-picker-indicator {
+    margin-inline-start: auto;
+  }
 
   /* ── Radio / checkbox styled box (peer reacts to the sr-only input) ── */
   .choice-box {

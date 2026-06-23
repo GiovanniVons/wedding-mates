@@ -703,7 +703,7 @@ function StepShell({
 }) {
   return (
     <section aria-labelledby="step-heading">
-      <div className="mb-[var(--space-4)] flex items-center gap-[var(--space-3)]">
+      <div className="mb-[var(--space-4)] flex flex-wrap items-center gap-[var(--space-3)]">
         <Chip variant="calm">{cue}</Chip>
         {optional && (
           <span
