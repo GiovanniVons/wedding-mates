@@ -118,7 +118,6 @@ export function Header({
         <a href="/" aria-label="Wedding Mates home" className="link-plain inline-flex">
           <Logo
             color={isSolid ? "var(--color-grape)" : "var(--color-page)"}
-            counterFill="transparent"
             width={140}
           />
         </a>
@@ -210,11 +209,7 @@ export function Header({
               transition={{ duration: reduceMotion ? 0 : 0.35, ease: [0.25, 0.1, 0.25, 1] }}
             >
               <div className="mb-[var(--space-6)] flex items-center justify-between">
-                <Logo
-                  color="var(--color-page)"
-                  counterFill="transparent"
-                  width={130}
-                />
+                <Logo color="var(--color-page)" width={130} />
                 <button
                   aria-label="Close menu"
                   onClick={() => setOpen(false)}

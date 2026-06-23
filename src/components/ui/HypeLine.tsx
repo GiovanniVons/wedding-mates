@@ -188,11 +188,12 @@ export function HypeLine({
             const trailingSpace =
               i < segments.length - 1 && !segments[i + 1]?.beat ? " " : "";
 
-            // The hit word: a coral marker highlight sweeps left-to-right behind
-            // the word on the third beat, like marking up a ceremony script. The
-            // word keeps the line colour on top (grape on light, page-white on
-            // grape), both AA-safe over coral at display scale. Reduced motion
-            // renders the full mark instantly.
+            // The hit word: the accent colour FILLS UP the word from bottom to
+            // top on the third beat, masked to the letterforms (like ink rising
+            // into the type). A coral copy of the word is overlaid on the base
+            // word and revealed via a clip-path inset that retreats from the
+            // bottom edge upward. End state is the full coral word (the brand's
+            // "hit word in the accent"). Reduced motion shows it filled at once.
             if (seg.hit) {
               return (
                 <Fragment key={i}>
@@ -203,29 +204,30 @@ export function HypeLine({
                       whiteSpace: "nowrap",
                     }}
                   >
+                    {/* base word in the line colour */}
+                    <span>{seg.text}</span>
+                    {/* coral fill rising bottom -> top, clipped to the word */}
                     <motion.span
                       aria-hidden="true"
                       style={{
                         position: "absolute",
-                        left: "-0.06em",
-                        right: "-0.06em",
-                        top: "0.16em",
-                        bottom: "0.12em",
-                        backgroundColor: "var(--theme-heading-accent)",
-                        transformOrigin: "left center",
-                        borderRadius: "var(--radius-small)",
-                        zIndex: 0,
+                        inset: 0,
+                        color: "var(--theme-heading-accent)",
+                        whiteSpace: "nowrap",
                       }}
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: revealed ? 1 : 0 }}
+                      initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
+                      animate={{
+                        clipPath: revealed
+                          ? "inset(0% 0% 0% 0%)"
+                          : "inset(100% 0% 0% 0%)",
+                      }}
                       transition={{
-                        duration: reduceMotion ? 0 : 0.42,
-                        ease: [0.7, 0, 0.3, 1],
+                        duration: reduceMotion ? 0 : 0.5,
+                        ease: [0.65, 0, 0.35, 1],
                       }}
-                    />
-                    <span style={{ position: "relative", zIndex: 1 }}>
+                    >
                       {seg.text}
-                    </span>
+                    </motion.span>
                   </span>
                   {trailingSpace}
                 </Fragment>

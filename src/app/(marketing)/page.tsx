@@ -63,17 +63,6 @@ export default function HomePage() {
                   stranger you have never met will nail the most special day of your
                   life. Why leave the most personal moment of your wedding to chance?
                 </p>
-                <span
-                  aria-hidden="true"
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontSize: "var(--font-size-h2)",
-                    color: "var(--color-coral)",
-                    lineHeight: 1,
-                  }}
-                >
-                  &middot;
-                </span>
                 <p className="text-large" style={{ color: "var(--color-grape-soft)", margin: 0 }}>
                   Now picture a more personal option. You are standing in front of
                   everyone you love, the music fades, and your best mate steps forward.

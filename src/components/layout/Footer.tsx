@@ -141,7 +141,7 @@ export function Footer() {
             borderTop: "var(--border-width-main) solid var(--theme-border)",
           }}
         >
-          <Logo color="var(--color-page)" counterFill="transparent" width={130} />
+          <Logo color="var(--color-page)" width={130} />
           <div
             className="flex flex-col gap-[var(--space-1)] sm:items-end"
             style={{ fontSize: "var(--font-size-text-small)", color: "var(--color-page-on-grape-o70)" }}

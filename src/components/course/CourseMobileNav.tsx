@@ -93,7 +93,7 @@ export function CourseMobileNav({
         }}
       >
         <a href="/course" aria-label="Course dashboard" className="link-plain inline-flex">
-          <Logo color="var(--color-grape)" counterFill="var(--color-page)" width={130} />
+          <Logo color="var(--color-grape)" width={130} />
         </a>
         <div className="flex items-center gap-[var(--space-3)]">
           <span className="meta-caps" style={{ color: "var(--color-grape-soft)" }}>

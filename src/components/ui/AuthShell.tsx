@@ -29,7 +29,7 @@ export function AuthShell({ chip, heading, children, footer }: AuthShellProps) {
       }}
     >
       <a href="/" aria-label="Wedding Mates home" className="link-plain mb-[var(--space-7)] inline-flex">
-        <Logo color="var(--color-grape)" counterFill="var(--color-page-tint)" width={160} />
+        <Logo color="var(--color-grape)" width={160} />
       </a>
       <div
         className="card w-full"

@@ -32,7 +32,7 @@ export function BookingHeader({
       }}
     >
       <a href="/" aria-label="Wedding Mates home" className="link-plain inline-flex">
-        <Logo color="var(--color-grape)" counterFill="var(--color-page)" width={132} />
+        <Logo color="var(--color-grape)" width={132} />
       </a>
 
       <div className="flex items-center gap-[var(--space-4)]">

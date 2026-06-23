@@ -24,10 +24,10 @@ export function AssetsSection() {
       <DBSubhead>Logo variants</DBSubhead>
       <div className="grid grid-cols-1 gap-[var(--space-4)] md:grid-cols-2">
         <DBPanel label="Grape (light chrome)">
-          <Logo color="var(--color-grape)" counterFill="var(--color-page)" width={200} />
+          <Logo color="var(--color-grape)" width={200} />
         </DBPanel>
         <DBPanel label="Page-white (grape footer / drawer)" theme="grape">
-          <Logo color="var(--color-page)" counterFill="var(--color-grape)" width={200} />
+          <Logo color="var(--color-page)" width={200} />
         </DBPanel>
       </div>
 
