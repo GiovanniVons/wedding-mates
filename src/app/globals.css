@@ -277,6 +277,98 @@
     margin-inline-start: auto;
   }
 
+  /* ── Branded desktop calendar (DateField popover) ── */
+  .cal-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-round);
+    color: var(--color-grape);
+    background-color: transparent;
+    border: var(--border-width-main) solid var(--color-grape-o20);
+    cursor: pointer;
+    transition: background-color var(--motion-duration-fast) ease,
+                border-color var(--motion-duration-fast) ease;
+  }
+  .cal-nav:hover:not(:disabled) { background-color: var(--color-grape-o12); }
+  .cal-nav:disabled { opacity: 0.35; cursor: not-allowed; }
+  .cal-nav:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--input-ring-focus); }
+
+  .cal-day {
+    aspect-ratio: 1 / 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-round);
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-text-small);
+    color: var(--color-grape);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background-color var(--motion-duration-fast) ease,
+                color var(--motion-duration-fast) ease;
+  }
+  .cal-day:hover:not(:disabled):not([data-selected="true"]) { background-color: var(--color-grape-o12); }
+  .cal-day:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--input-ring-focus); }
+  .cal-day[data-today="true"] { box-shadow: inset 0 0 0 var(--border-width-main) var(--color-mint-deep); }
+  .cal-day[data-selected="true"] {
+    background-color: var(--color-coral);
+    color: var(--color-page);
+    font-weight: var(--font-weight-heavy);
+  }
+  .cal-day:disabled { color: var(--color-grape-o40); cursor: not-allowed; }
+
+  /* ── Stepper: clickable completed step dots ── */
+  .step-dot-button {
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: var(--radius-round);
+    transition: transform var(--motion-duration-fast) ease;
+  }
+  .step-dot-button:hover { transform: translateY(-2px); }
+  .step-dot-button:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--input-ring-focus); }
+
+  /* ── In-flow tier switcher rows (TierSelect) ── */
+  .tier-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    padding: var(--space-4);
+    border-radius: var(--radius-main);
+    border: var(--border-width-main) solid var(--color-grape-o20);
+    background-color: var(--color-page);
+    transition: border-color var(--motion-duration-fast) ease;
+  }
+  .tier-row:hover { border-color: var(--color-grape-o40); }
+  .tier-row[data-selected="true"] { border-color: var(--color-coral); }
+  .tier-row:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--input-ring-focus); }
+  .tier-row-radio {
+    position: relative;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 0.15em;
+    border-radius: var(--radius-round);
+    border: var(--border-width-main) solid var(--color-grape);
+  }
+  .tier-row[data-selected="true"] .tier-row-radio { border-color: var(--color-coral); }
+  .tier-row[data-selected="true"] .tier-row-radio::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: var(--radius-round);
+    background-color: var(--color-coral);
+  }
+
   /* ── Radio / checkbox styled box (peer reacts to the sr-only input) ── */
   .choice-box {
     position: relative;

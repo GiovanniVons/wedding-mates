@@ -164,6 +164,11 @@ export function centsToDollars(cents: number): number {
   return Math.round(cents / 100);
 }
 
+/** Whole dollars -> grouped display string (1490 -> "1,490", 69 -> "69"). */
+export function formatDollars(dollars: number): string {
+  return dollars.toLocaleString("en-AU");
+}
+
 export interface ComputedTotal {
   /** The chosen tier (resolved; never undefined). */
   tier: TierDef;

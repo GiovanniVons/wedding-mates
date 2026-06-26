@@ -1,8 +1,11 @@
 /**
- * booking.ts -- the verbatim booking-wizard copy (page-copy.md Booking Wizard +
- * booking-portal-copy.txt). Every user-facing string the wizard renders lives
- * here so it can be checked against the source in one place. AU English; no em
+ * booking.ts -- the verbatim booking-wizard copy. Every user-facing string the
+ * wizard renders lives here so it can be checked in one place. AU English; no em
  * dashes, no double hyphens in any client-facing string.
+ *
+ * Flow (4 steps + confirmation): 1 Date, 2 Details, 3 Your day (optional:
+ * celebrant + venue), 4 Review & pay (order bump extras + checkout). Step 7 is
+ * the separate /book/confirmation route.
  */
 
 export const BOOKING_COPY = {
@@ -41,48 +44,43 @@ export const BOOKING_COPY = {
     cta: "Continue",
   },
   step3: {
-    cue: "STEP 3 · YOUR CELEBRANT",
-    heading: "Who's your mate?",
-    helper: "You can add this now or later.",
-    notChosen: "We haven't chosen one yet",
-    labels: {
-      name: "Name of your chosen celebrant",
-      email: "Email",
-      phone: "Phone",
+    cue: "STEP 3 · YOUR DAY",
+    heading: "Your mate and the venue",
+    helper: "All optional. Add what you know now, you can finish the rest later.",
+    celebrant: {
+      label: "Who's leading your ceremony?",
+      notChosen: "We haven't chosen our mate yet",
+      labels: {
+        name: "Their name",
+        email: "Their email",
+        phone: "Their mobile",
+      },
+      placeholders: {
+        name: "Their full name",
+        email: "Their email",
+        phone: "Their mobile",
+      },
     },
-    placeholders: {
-      name: "Their full name",
-      email: "Their email",
-      phone: "Their mobile",
+    location: {
+      label: "Where's it happening?",
+      field: "Ceremony location",
+      helper: "A venue, a backyard, a beach, anywhere",
     },
     skip: "Skip for now",
     cta: "Continue",
   },
   step4: {
-    cue: "STEP 4 · CEREMONY LOCATION",
-    heading: "Where will it happen?",
-    label: "Ceremony location",
-    helper: "A venue, a backyard, a beach, anywhere",
-    skip: "Skip for now",
-    cta: "Continue",
-  },
-  step5: {
-    cue: "STEP 5 · OPTIONAL EXTRAS",
-    heading: "Want to add anything?",
-    intro: "All optional. Add what you like, skip the rest.",
+    cue: "STEP 4 · REVIEW & PAY",
+    heading: "Review and pay",
+    extrasLabel: "Add to your booking",
+    extrasIntro: "Optional. Add what you like, skip the rest.",
     added: "Added",
     add: "Add",
-    cta: "Continue to payment",
-  },
-  step6: {
-    cue: "STEP 6 · PAYMENT",
-    heading: "Secure checkout",
     summaryHeading: "Your order",
-    baseLine: "Wedding Mates package",
     gstNote: "All prices in AUD.",
-    totalLabel: "Total",
     trust: "Secure payment via Stripe. Questions? Message Sarah any time.",
-    disabledHelper: "Add your card details to continue.",
+    canceled:
+      "No charge was made. Your details are saved, finish whenever you're ready.",
     notConfigured:
       "Payments are not configured in this preview. The booking details are captured and the checkout connects once the live Stripe keys are added.",
     errors: {

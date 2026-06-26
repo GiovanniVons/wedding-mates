@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { formatDollars } from "@/lib/stripe/pricing";
 
 export interface Extra {
   id: string;
@@ -82,7 +83,7 @@ export function ExtrasToggleCard({
               lineHeight: 1,
             }}
           >
-            ${extra.price}
+            ${formatDollars(extra.price)}
           </span>
           <span
             aria-hidden="true"
@@ -152,13 +153,13 @@ export function RunningTotalBar({
           <div className="flex items-center justify-between">
             <dt style={{ color: "var(--color-grape-soft)" }}>Base</dt>
             <dd style={{ margin: 0, color: "var(--color-grape)", fontWeight: "var(--font-weight-semibold)" }}>
-              ${base}
+              ${formatDollars(base)}
             </dd>
           </div>
           <div className="flex items-center justify-between">
             <dt style={{ color: "var(--color-grape-soft)" }}>Extras</dt>
             <dd style={{ margin: 0, color: "var(--color-grape)", fontWeight: "var(--font-weight-semibold)" }}>
-              ${extrasTotal}
+              ${formatDollars(extrasTotal)}
             </dd>
           </div>
         </dl>
@@ -174,7 +175,7 @@ export function RunningTotalBar({
               color: "var(--color-grape)",
             }}
           >
-            ${total}
+            ${formatDollars(total)}
           </span>
         </div>
       </div>
@@ -203,7 +204,7 @@ export function RunningTotalBar({
       }}
     >
       <span style={{ fontSize: "var(--font-size-text-small)", color: "var(--total-bar-text)" }}>
-        Base ${base} {extrasTotal > 0 ? `+ extras $${extrasTotal}` : ""}
+        Base ${formatDollars(base)} {extrasTotal > 0 ? `+ extras $${formatDollars(extrasTotal)}` : ""}
       </span>
       <span
         style={{
@@ -213,7 +214,7 @@ export function RunningTotalBar({
           lineHeight: 1,
         }}
       >
-        ${total}
+        ${formatDollars(total)}
       </span>
     </div>
   );
@@ -244,14 +245,14 @@ export function OrderSummary({ base, baseLabel = "Wedding Mates package", select
         <div className="flex items-center justify-between">
           <dt style={{ color: "var(--color-grape-soft)" }}>{baseLabel}</dt>
           <dd style={{ margin: 0, color: "var(--color-grape)", fontWeight: "var(--font-weight-semibold)" }}>
-            ${base}
+            ${formatDollars(base)}
           </dd>
         </div>
         {selected.map((e) => (
           <div key={e.id} className="flex items-center justify-between">
             <dt style={{ color: "var(--color-grape-soft)" }}>{e.name}</dt>
             <dd style={{ margin: 0, color: "var(--color-grape)", fontWeight: "var(--font-weight-semibold)" }}>
-              ${e.price}
+              ${formatDollars(e.price)}
             </dd>
           </div>
         ))}
@@ -262,7 +263,7 @@ export function OrderSummary({ base, baseLabel = "Wedding Mates package", select
       >
         <span style={{ fontWeight: "var(--font-weight-heavy)", color: "var(--color-grape)" }}>Total</span>
         <span style={{ fontFamily: "var(--font-display)", fontSize: "var(--font-size-h3)", color: "var(--color-grape)" }}>
-          ${total}
+          ${formatDollars(total)}
         </span>
       </div>
       {gstNote && (
