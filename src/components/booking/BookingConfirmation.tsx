@@ -32,8 +32,11 @@ export function BookingConfirmation() {
   const pollsRef = useRef(0);
 
   useEffect(() => {
-    // Clear the saved draft once we reach the confirmation route.
+    // Clear the saved draft once we reach the confirmation route. localStorage
+    // now persists the draft across sessions, so it must be cleared on
+    // completion; also clear any legacy sessionStorage draft.
     try {
+      localStorage.removeItem("wm-booking-draft");
       sessionStorage.removeItem("wm-booking-draft");
     } catch {
       // ignore

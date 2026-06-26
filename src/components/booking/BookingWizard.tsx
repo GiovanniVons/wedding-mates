@@ -126,6 +126,7 @@ export function BookingWizard() {
   const [notConfigured, setNotConfigured] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [tierPickerOpen, setTierPickerOpen] = useState(false);
+  const [resumed, setResumed] = useState(false);
   const liveRef = useRef<HTMLDivElement>(null);
 
   // --- Restore the draft + resolve the tier on mount -------------------------
@@ -134,7 +135,7 @@ export function BookingWizard() {
   useEffect(() => {
     let draft: Partial<BookingState> = {};
     try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) draft = JSON.parse(raw) as Partial<BookingState>;
     } catch {
       // ignore malformed draft
@@ -147,6 +148,7 @@ export function BookingWizard() {
           ? draft.tier
           : DEFAULT_TIER;
     setData({ ...EMPTY, ...draft, tier });
+    if (draft.weddingDate || draft.fullName || draft.email) setResumed(true);
     setHydrated(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -155,7 +157,7 @@ export function BookingWizard() {
   useEffect(() => {
     if (!hydrated) return;
     try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch {
       // storage unavailable (private mode): the URL step still works
     }
@@ -339,6 +341,30 @@ export function BookingWizard() {
 
       <main id="main" style={{ paddingBlock: "var(--section-space-main)" }}>
         <Container width="form">
+          {/* Resume cue: a draft was restored (localStorage persists it across
+              sessions on this device), so reassure the returning buyer. */}
+          {resumed && step === 1 && (
+            <div
+              className="mb-[var(--space-4)] flex items-center gap-[var(--space-3)]"
+              style={{
+                backgroundColor: "var(--color-field-mint)",
+                border: "var(--border-width-main) solid var(--color-mint-deep)",
+                borderRadius: "var(--radius-main)",
+                padding: "var(--space-3) var(--space-4)",
+              }}
+            >
+              <Chip variant="mint">Welcome back</Chip>
+              <p
+                style={{
+                  margin: 0,
+                  color: "var(--color-grape)",
+                  fontSize: "var(--font-size-text-small)",
+                }}
+              >
+                We saved your progress. Pick up right where you left off.
+              </p>
+            </div>
+          )}
           {/* Persistent purchase context: which package + price, always visible
               so the buyer never wonders what they are paying for. */}
           <div
