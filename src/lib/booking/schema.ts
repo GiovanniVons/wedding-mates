@@ -27,22 +27,21 @@ export const dateStepSchema = z.object({
     ),
 });
 
-/** Step 2 -- Details (required gate). */
+/**
+ * Step 2 -- Details. Only name + email are required (email creates the account);
+ * partner name, mobile and suburb are optional to keep the path to payment
+ * short. A provided mobile must still be a valid AU number.
+ */
 export const detailsStepSchema = z.object({
   fullName: z.string().trim().min(1, "We'll need your name to get started."),
-  partnerName: z
-    .string()
-    .trim()
-    .min(1, "And your partner's name too."),
+  partnerName: z.string().trim().optional().default(""),
   email: z.string().trim().email("That email does not look quite right."),
   mobile: z
     .string()
     .trim()
-    .regex(AU_MOBILE, "Pop in a valid Australian mobile number."),
-  suburb: z
-    .string()
-    .trim()
-    .min(1, "Your suburb helps us plan the legal meeting."),
+    .default("")
+    .refine((v) => v === "" || AU_MOBILE.test(v), "Pop in a valid Australian mobile number."),
+  suburb: z.string().trim().optional().default(""),
   preferredContact: z.enum(["Email", "Phone"]).default("Email"),
 });
 

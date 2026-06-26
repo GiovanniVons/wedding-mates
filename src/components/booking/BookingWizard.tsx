@@ -4,14 +4,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
-import { Stepper, BOOKING_STEPS } from "@/components/ui/Stepper";
+import { Stepper } from "@/components/ui/Stepper";
 import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { TextField, TextareaField, Choice } from "@/components/ui/Field";
+import { DateField } from "@/components/ui/DateField";
+import { TierSelect } from "@/components/booking/TierSelect";
 import {
   ExtrasToggleCard,
   OrderSummary,
-  RunningTotalBar,
   type Extra,
 } from "@/components/ui/BookingExtras";
 import { BookingHeader } from "@/components/layout/BookingHeader";
@@ -22,6 +23,7 @@ import {
   resolveTier,
   isTierKey,
   centsToDollars,
+  formatDollars,
   computeTotal,
   type ExtraKey,
   type TierKey,
@@ -70,7 +72,7 @@ const EMPTY: BookingState = {
 
 const STORAGE_KEY = "wm-booking-draft";
 const MIN_STEP = 1;
-const MAX_STEP = 6; // step 7 is the separate /book/confirmation route
+const MAX_STEP = 4; // 1 Date, 2 Details, 3 Your day, 4 Review & pay. Done = /book/confirmation.
 
 /** Map an extras pricing def to the ExtrasToggleCard shape (dollar display). */
 const EXTRA_CARDS: Extra[] = EXTRAS.map((e) => ({
@@ -79,6 +81,18 @@ const EXTRA_CARDS: Extra[] = EXTRAS.map((e) => ({
   price: centsToDollars(e.amountCents),
   description: e.description,
 }));
+
+/** ISO date -> warm long display ("Saturday 5 September 2026"). */
+function formatWeddingDate(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return "";
+  return new Date(y, m - 1, d).toLocaleDateString("en-AU", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
 
 /** True when the wedding date is less than 4 weeks (28 days) from today. */
 function isWithinFourWeeks(dateStr: string): boolean {
@@ -111,6 +125,7 @@ export function BookingWizard() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [notConfigured, setNotConfigured] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [tierPickerOpen, setTierPickerOpen] = useState(false);
   const liveRef = useRef<HTMLDivElement>(null);
 
   // --- Restore the draft + resolve the tier on mount -------------------------
@@ -178,8 +193,10 @@ export function BookingWizard() {
     () => computeTotal(data.tier, data.extras),
     [data.tier, data.extras],
   );
-  const extrasDollars = centsToDollars(total.extrasCents);
   const totalDollars = centsToDollars(total.totalCents);
+  const upgradeDelta = formatDollars(
+    centsToDollars(resolveTier("complete").amountCents - resolveTier("ceremony").amountCents),
+  );
 
   /* --------------------------------------------------------- validation */
   const validateStep = useCallback(
@@ -214,7 +231,7 @@ export function BookingWizard() {
         return true;
       }
       if (current === 3) {
-        // Optional; only validate a provided celebrant email format.
+        // Your day is optional; only validate a provided celebrant email format.
         if (!data.celebrantNotChosen && data.celebrantEmail) {
           const r = celebrantStepSchema.safeParse({
             celebrantNotChosen: data.celebrantNotChosen,
@@ -229,7 +246,7 @@ export function BookingWizard() {
         }
         return true;
       }
-      // Steps 4, 5, 6: no required gate.
+      // Step 4 (review & pay): no required gate (handlePay does the work).
       return true;
     },
     [data],
@@ -277,7 +294,7 @@ export function BookingWizard() {
         return;
       }
       if (!res.ok) {
-        setSubmitError(BOOKING_COPY.step6.errors.generic);
+        setSubmitError(BOOKING_COPY.step4.errors.generic);
         setSubmitting(false);
         return;
       }
@@ -286,16 +303,15 @@ export function BookingWizard() {
         window.location.assign(body.url); // redirect to Stripe Checkout
         return;
       }
-      setSubmitError(BOOKING_COPY.step6.errors.generic);
+      setSubmitError(BOOKING_COPY.step4.errors.generic);
       setSubmitting(false);
     } catch {
-      setSubmitError(BOOKING_COPY.step6.errors.generic);
+      setSubmitError(BOOKING_COPY.step4.errors.generic);
       setSubmitting(false);
     }
   }, [data]);
 
-  // Guard: if a user deep-links to step 6 without the required gates, send them
-  // back to the first incomplete required step.
+  // Guard: if a user deep-links past step 1 without a valid date, send them back.
   useEffect(() => {
     if (!hydrated) return;
     if (step >= 2 && !dateStepSchema.safeParse({ weddingDate: data.weddingDate }).success) {
@@ -310,7 +326,7 @@ export function BookingWizard() {
     initial: { opacity: 0, x: reduceMotion ? 0 : 16 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: reduceMotion ? 0 : -16 },
-    transition: { duration: reduceMotion ? 0 : 0.28 },
+    transition: { duration: reduceMotion ? 0 : 0.32, ease: [0.16, 1, 0.3, 1] as const },
   };
 
   return (
@@ -319,19 +335,90 @@ export function BookingWizard() {
       className="min-h-screen"
       style={{ backgroundColor: "var(--color-page)" }}
     >
-      <BookingHeader current={step} total={7} />
+      <BookingHeader />
 
-      <main
-        id="main"
-        style={{
-          paddingBlock: "var(--section-space-main)",
-          // reserve room above the mobile sticky total bar on the extras step
-          paddingBottom:
-            step === 5 ? "calc(var(--section-space-main) + var(--total-bar-height))" : undefined,
-        }}
-      >
+      <main id="main" style={{ paddingBlock: "var(--section-space-main)" }}>
         <Container width="form">
-          <Stepper current={step} className="mb-[var(--space-7)]" />
+          {/* Persistent purchase context: which package + price, always visible
+              so the buyer never wonders what they are paying for. */}
+          <div
+            className="mb-[var(--space-5)] flex items-center justify-between gap-[var(--space-3)]"
+            style={{
+              backgroundColor: "var(--color-page-tint)",
+              border: "var(--border-width-main) solid var(--color-grape-o20)",
+              borderRadius: "var(--radius-main)",
+              padding: "var(--space-3) var(--space-4)",
+            }}
+          >
+            <span className="flex items-baseline gap-[var(--space-2)]" style={{ minWidth: 0 }}>
+              <span
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontWeight: "var(--font-weight-heavy)",
+                  color: "var(--color-grape)",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {selectedTier.name}
+              </span>
+              <span
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontWeight: "var(--font-weight-heavy)",
+                  color: "var(--color-coral-deep)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                ${formatDollars(baseDollars)}
+              </span>
+            </span>
+            <button
+              type="button"
+              aria-expanded={tierPickerOpen}
+              onClick={() => setTierPickerOpen((o) => !o)}
+              style={{
+                background: "transparent",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+                fontFamily: "var(--font-body)",
+                fontWeight: "var(--font-weight-semibold)",
+                fontSize: "var(--font-size-text-small)",
+                color: "var(--color-grape)",
+                textDecoration: "underline",
+                textDecorationColor: "var(--color-grape-o40)",
+                textUnderlineOffset: "0.2em",
+                whiteSpace: "nowrap",
+                flexShrink: 0,
+              }}
+            >
+              {tierPickerOpen ? "Close" : "Change"}
+            </button>
+          </div>
+          <AnimatePresence initial={false}>
+            {tierPickerOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: reduceMotion ? 0 : 0.24 }}
+                style={{ overflow: "hidden" }}
+              >
+                <div className="mb-[var(--space-5)]">
+                  <TierSelect
+                    value={data.tier}
+                    onChange={(t) => {
+                      set("tier", t);
+                      setTierPickerOpen(false);
+                    }}
+                  />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <Stepper current={step} onStepSelect={goToStep} className="mb-[var(--space-7)]" />
 
           <div
             ref={liveRef}
@@ -343,17 +430,56 @@ export function BookingWizard() {
               <motion.div key={step} {...stepTransition}>
                 {step === 1 && (
                   <StepShell cue={BOOKING_COPY.step1.cue} heading={BOOKING_COPY.step1.heading}>
-                    <TextField
-                      type="date"
+                    <DateField
                       label={BOOKING_COPY.step1.label}
                       helper={errors.weddingDate ? undefined : BOOKING_COPY.step1.helper}
                       error={errors.weddingDate}
                       value={data.weddingDate}
                       min={new Date().toISOString().slice(0, 10)}
-                      onChange={(e) => set("weddingDate", e.target.value)}
+                      onChange={(iso) => set("weddingDate", iso)}
                     />
                     {/* Reserve the note's space so Continue never shifts. */}
                     <div style={{ minHeight: "var(--space-2)" }}>
+                      <AnimatePresence>
+                        {data.weddingDate && !errors.weddingDate && (
+                          <motion.div
+                            key="date-locked"
+                            initial={{ opacity: 0, y: reduceMotion ? 0 : 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: reduceMotion ? 0 : 0.34, ease: [0.16, 1, 0.3, 1] }}
+                            className="mt-[var(--space-4)] flex items-center gap-[var(--space-3)]"
+                          >
+                            <motion.span
+                              aria-hidden="true"
+                              initial={{ scale: reduceMotion ? 1 : 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{
+                                delay: reduceMotion ? 0 : 0.12,
+                                type: "spring",
+                                stiffness: 500,
+                                damping: 18,
+                              }}
+                              style={{
+                                width: "10px",
+                                height: "10px",
+                                borderRadius: "var(--radius-round)",
+                                backgroundColor: "var(--color-coral)",
+                                flexShrink: 0,
+                              }}
+                            />
+                            <p
+                              style={{
+                                margin: 0,
+                                color: "var(--color-grape)",
+                                fontWeight: "var(--font-weight-semibold)",
+                              }}
+                            >
+                              {formatWeddingDate(data.weddingDate)}. Locked in.
+                            </p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                       {showFourWeekNote && (
                         <div
                           className="mt-[var(--space-4)] flex items-start gap-[var(--space-3)]"
@@ -396,6 +522,7 @@ export function BookingWizard() {
                       <TextField
                         label={BOOKING_COPY.step2.labels.partnerName}
                         placeholder={BOOKING_COPY.step2.placeholders.partnerName}
+                        optional
                         value={data.partnerName}
                         error={errors.partnerName}
                         onChange={(e) => set("partnerName", e.target.value)}
@@ -413,6 +540,7 @@ export function BookingWizard() {
                         type="tel"
                         label={BOOKING_COPY.step2.labels.mobile}
                         placeholder={BOOKING_COPY.step2.placeholders.mobile}
+                        optional
                         value={data.mobile}
                         error={errors.mobile}
                         autoComplete="tel"
@@ -422,6 +550,7 @@ export function BookingWizard() {
                     <div className="mt-[var(--space-5)]">
                       <TextField
                         label={BOOKING_COPY.step2.labels.suburb}
+                        optional
                         helper={errors.suburb ? undefined : BOOKING_COPY.step2.suburbHelper}
                         error={errors.suburb}
                         value={data.suburb}
@@ -473,9 +602,10 @@ export function BookingWizard() {
                     optional
                     helper={BOOKING_COPY.step3.helper}
                   >
+                    <SubLabel>{BOOKING_COPY.step3.celebrant.label}</SubLabel>
                     <Choice
                       type="checkbox"
-                      label={BOOKING_COPY.step3.notChosen}
+                      label={BOOKING_COPY.step3.celebrant.notChosen}
                       checked={data.celebrantNotChosen}
                       onChange={(e) => set("celebrantNotChosen", e.target.checked)}
                       className="mb-[var(--space-5)]"
@@ -483,16 +613,16 @@ export function BookingWizard() {
                     {!data.celebrantNotChosen && (
                       <div className="flex flex-col gap-[var(--space-5)]">
                         <TextField
-                          label={BOOKING_COPY.step3.labels.name}
-                          placeholder={BOOKING_COPY.step3.placeholders.name}
+                          label={BOOKING_COPY.step3.celebrant.labels.name}
+                          placeholder={BOOKING_COPY.step3.celebrant.placeholders.name}
                           optional
                           value={data.celebrantName}
                           onChange={(e) => set("celebrantName", e.target.value)}
                         />
                         <TextField
                           type="email"
-                          label={BOOKING_COPY.step3.labels.email}
-                          placeholder={BOOKING_COPY.step3.placeholders.email}
+                          label={BOOKING_COPY.step3.celebrant.labels.email}
+                          placeholder={BOOKING_COPY.step3.celebrant.placeholders.email}
                           optional
                           error={errors.celebrantEmail}
                           value={data.celebrantEmail}
@@ -500,14 +630,24 @@ export function BookingWizard() {
                         />
                         <TextField
                           type="tel"
-                          label={BOOKING_COPY.step3.labels.phone}
-                          placeholder={BOOKING_COPY.step3.placeholders.phone}
+                          label={BOOKING_COPY.step3.celebrant.labels.phone}
+                          placeholder={BOOKING_COPY.step3.celebrant.placeholders.phone}
                           optional
                           value={data.celebrantPhone}
                           onChange={(e) => set("celebrantPhone", e.target.value)}
                         />
                       </div>
                     )}
+                    <div className="mt-[var(--space-7)]">
+                      <SubLabel>{BOOKING_COPY.step3.location.label}</SubLabel>
+                      <TextareaField
+                        label={BOOKING_COPY.step3.location.field}
+                        helper={BOOKING_COPY.step3.location.helper}
+                        optional
+                        value={data.ceremonyLocation}
+                        onChange={(e) => set("ceremonyLocation", e.target.value)}
+                      />
+                    </div>
                     <StepActions
                       onBack={() => goToStep(2)}
                       onContinue={handleContinue}
@@ -519,31 +659,34 @@ export function BookingWizard() {
                 )}
 
                 {step === 4 && (
-                  <StepShell
-                    cue={BOOKING_COPY.step4.cue}
-                    heading={BOOKING_COPY.step4.heading}
-                    optional
-                  >
-                    <TextareaField
-                      label={BOOKING_COPY.step4.label}
-                      helper={BOOKING_COPY.step4.helper}
-                      optional
-                      value={data.ceremonyLocation}
-                      onChange={(e) => set("ceremonyLocation", e.target.value)}
-                    />
-                    <StepActions
-                      onBack={() => goToStep(3)}
-                      onContinue={handleContinue}
-                      continueLabel={BOOKING_COPY.step4.cta}
-                      onSkip={handleSkip}
-                      skipLabel={BOOKING_COPY.step4.skip}
-                    />
-                  </StepShell>
-                )}
+                  <StepShell cue={BOOKING_COPY.step4.cue} heading={BOOKING_COPY.step4.heading}>
+                    {canceled && (
+                      <p
+                        role="status"
+                        className="mb-[var(--space-4)]"
+                        style={{
+                          color: "var(--color-grape-soft)",
+                          fontSize: "var(--font-size-text-small)",
+                        }}
+                      >
+                        {BOOKING_COPY.step4.canceled}
+                      </p>
+                    )}
 
-                {step === 5 && (
-                  <StepShell cue={BOOKING_COPY.step5.cue} heading={BOOKING_COPY.step5.heading} helper={BOOKING_COPY.step5.intro}>
-                    <div className="grid gap-[var(--space-4)] md:grid-cols-2">
+                    {/* Order bump: optional add-ons, shown in the context of the order
+                        rather than as a roadblock step before payment. */}
+                    <SubLabel>{BOOKING_COPY.step4.extrasLabel}</SubLabel>
+                    <p
+                      className="mb-[var(--space-4)]"
+                      style={{
+                        margin: "0 0 var(--space-4)",
+                        color: "var(--color-grape-soft)",
+                        fontSize: "var(--font-size-text-small)",
+                      }}
+                    >
+                      {BOOKING_COPY.step4.extrasIntro}
+                    </p>
+                    <div className="flex flex-col gap-[var(--space-3)]">
                       {EXTRA_CARDS.map((extra) => (
                         <ExtrasToggleCard
                           key={extra.id}
@@ -561,54 +704,51 @@ export function BookingWizard() {
                         />
                       ))}
                     </div>
-                    <p
-                      className="mt-[var(--space-5)]"
-                      aria-live="polite"
-                      style={{
-                        fontFamily: "var(--font-body)",
-                        fontWeight: "var(--font-weight-semibold)",
-                        color: "var(--color-grape)",
-                      }}
-                    >
-                      {selectedTier.name} ${baseDollars}
-                      {extrasDollars > 0 ? ` + extras $${extrasDollars}` : ""} = ${totalDollars}
-                    </p>
-                    <StepActions
-                      onBack={() => goToStep(4)}
-                      onContinue={handleContinue}
-                      continueLabel={BOOKING_COPY.step5.cta}
-                    />
-                  </StepShell>
-                )}
 
-                {step === 6 && (
-                  <StepShell cue={BOOKING_COPY.step6.cue} heading={BOOKING_COPY.step6.heading}>
-                    {canceled && (
-                      <p
-                        role="status"
-                        className="mb-[var(--space-4)]"
+                    <div className="mt-[var(--space-7)]">
+                      <OrderSummary
+                        base={baseDollars}
+                        baseLabel={selectedTier.name}
+                        selected={EXTRA_CARDS.filter((e) =>
+                          data.extras.includes(e.id as ExtraKey),
+                        )}
+                        gstNote={BOOKING_COPY.step4.gstNote}
+                      />
+                    </div>
+
+                    {/* Upgrade nudge: only for the leaner Ceremony tier. One tap
+                        swaps the tier in place (no navigation). */}
+                    {data.tier === "ceremony" && (
+                      <div
+                        className="mt-[var(--space-5)] flex items-center justify-between gap-[var(--space-4)]"
                         style={{
-                          color: "var(--color-grape-soft)",
-                          fontSize: "var(--font-size-text-small)",
+                          backgroundColor: "var(--color-page-tint)",
+                          border: "var(--border-width-main) solid var(--color-marigold-deep)",
+                          borderRadius: "var(--radius-main)",
+                          padding: "var(--space-4)",
                         }}
                       >
-                        No charge was made. Your details are saved, finish whenever you're ready.
-                      </p>
+                        <div style={{ minWidth: 0 }}>
+                          <strong
+                            style={{
+                              display: "block",
+                              color: "var(--color-grape)",
+                              fontSize: "var(--font-size-text-small)",
+                            }}
+                          >
+                            Add the rehearsal and script review
+                          </strong>
+                          <span
+                            style={{ color: "var(--color-grape-soft)", fontSize: "var(--font-size-text-small)" }}
+                          >
+                            Most couples choose Complete. Upgrade for ${upgradeDelta} more and walk in ready.
+                          </span>
+                        </div>
+                        <Button variant="secondary" size="small" onClick={() => set("tier", "complete")}>
+                          Upgrade
+                        </Button>
+                      </div>
                     )}
-                    <OrderSummary
-                      base={baseDollars}
-                      baseLabel={selectedTier.name}
-                      selected={EXTRA_CARDS.filter((e) =>
-                        data.extras.includes(e.id as ExtraKey),
-                      )}
-                      gstNote={BOOKING_COPY.step6.gstNote}
-                    />
-                    <p
-                      className="mt-[var(--space-3)] text-center"
-                      style={{ fontSize: "var(--font-size-text-small)", margin: "var(--space-3) 0 0" }}
-                    >
-                      <a href="/pricing">Change package</a>
-                    </p>
 
                     {notConfigured && (
                       <div
@@ -627,7 +767,7 @@ export function BookingWizard() {
                         <strong style={{ display: "block", marginBottom: "var(--space-1)" }}>
                           Payments not configured
                         </strong>
-                        {BOOKING_COPY.step6.notConfigured}
+                        {BOOKING_COPY.step4.notConfigured}
                       </div>
                     )}
 
@@ -645,6 +785,29 @@ export function BookingWizard() {
                       </p>
                     )}
 
+                    <div
+                      className="mt-[var(--space-5)] flex items-start gap-[var(--space-3)]"
+                      style={{
+                        backgroundColor: "var(--color-field-mint)",
+                        border: "var(--border-width-main) solid var(--color-mint-deep)",
+                        borderRadius: "var(--radius-main)",
+                        padding: "var(--space-4)",
+                      }}
+                    >
+                      <Chip variant="mint">You&rsquo;re covered</Chip>
+                      <p
+                        style={{
+                          margin: 0,
+                          color: "var(--color-grape)",
+                          fontSize: "var(--font-size-text-small)",
+                          lineHeight: "var(--line-height-large)",
+                        }}
+                      >
+                        The legals are handled by a registered celebrant, and your mate is
+                        trained and supported every step. You&rsquo;re not doing this on your own.
+                      </p>
+                    </div>
+
                     <div className="mt-[var(--space-6)]">
                       <Button
                         variant="primary"
@@ -653,7 +816,7 @@ export function BookingWizard() {
                         disabled={submitting}
                         onClick={handlePay}
                       >
-                        {submitting ? BOOKING_COPY.step6.errors.processing : `Pay $${totalDollars}`}
+                        {submitting ? BOOKING_COPY.step4.errors.processing : `Pay $${formatDollars(totalDollars)}`}
                       </Button>
                       <p
                         className="mt-[var(--space-3)] text-center"
@@ -662,10 +825,10 @@ export function BookingWizard() {
                           fontSize: "var(--font-size-text-small)",
                         }}
                       >
-                        {BOOKING_COPY.step6.trust}
+                        {BOOKING_COPY.step4.trust}
                       </p>
                       <div className="mt-[var(--space-4)] flex justify-center">
-                        <Button variant="tertiary" size="small" onClick={() => goToStep(5)}>
+                        <Button variant="tertiary" size="small" onClick={() => goToStep(3)}>
                           Back
                         </Button>
                       </div>
@@ -677,16 +840,25 @@ export function BookingWizard() {
           </div>
         </Container>
       </main>
-
-      {/* Mobile sticky running total -- only on the extras step. */}
-      {step === 5 && (
-        <RunningTotalBar base={baseDollars} extrasTotal={extrasDollars} variant="sticky" />
-      )}
     </div>
   );
 }
 
 /* ------------------------------------------------------------------ shells */
+
+function SubLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <h2
+      className="h4"
+      style={{
+        margin: "0 0 var(--space-4)",
+        color: "var(--color-grape)",
+      }}
+    >
+      {children}
+    </h2>
+  );
+}
 
 function StepShell({
   cue,
