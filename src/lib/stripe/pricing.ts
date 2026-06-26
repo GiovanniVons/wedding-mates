@@ -19,8 +19,8 @@
  * "The Ceremony, Complete" the obvious choice; the two failure-preventing
  * deliverables (rehearsal + script review) now live INSIDE Complete rather
  * than as paid add-ons. Launch ("founding-couples") rates; step Complete to
- * 1,790 once real reviews + a gallery exist. PROVISIONAL pending the client's
- * (Sarah's) sign-off: to reprice, change the two amountCents below only.
+ * 1,790 once real reviews + a gallery exist. APPROVED by the client 2026-06-26
+ * (founding-couples rates). To reprice, change the two amountCents below only.
  */
 
 export const CURRENCY = "aud" as const;

@@ -3,7 +3,7 @@
 **Location:** website-projects/client-projects/wedding-mates
 **Phase:** refinement (Phase 4 passed 2026-06-22)
 **Dev Server:** localhost:5067 (build + `next start`, NOT turbopack dev -- the path has spaces)
-**Status:** active -- functionally complete; blocked on client pricing sign-off (two-tier, see docs/pricing-recommendation.md) + service credentials + content for go-live
+**Status:** active -- functionally complete; pricing APPROVED (two-tier, 2026-06-26); blocked on service credentials + content for go-live
 
 ---
 
@@ -26,6 +26,10 @@ See `docs/artifacts/file-manifest.md` (routes, components, lib, migrations). Key
 - [ ] None blocking. All Critical/Major resolved.
 
 ## Recent Changes (Change Log)
+### 2026-06-26
+- **Pricing APPROVED by the client** (two-tier founding rates: The Ceremony $1,150 / The Ceremony, Complete $1,490). No longer provisional. Step Complete to ~$1,790 once real reviews + a gallery exist.
+- **/book flow reworked** (3 stages, shipped to main as PR #2 `daf9c83`; deployed via Netlify): 7 -> 4 steps; extras moved to an order bump on Review & pay (full-width rows); required fields trimmed to name + email; persistent purchase chip; clickable stepper; in-flow tier switcher (chip "Change" expands the two tiers, no /pricing bounce); Ceremony->Complete upgrade nudge; branded desktop calendar (`DateField`, native iOS kept on touch); comma price formatting; held-beat "Locked in." date delight; brand-timed transitions; trust beat above Pay. New files: `components/ui/DateField.tsx`, `components/booking/TierSelect.tsx`. Build + token lint clean; WebKit (iPhone 14 / SE) overflow scan clean across all 4 steps at 390/320.
+- **Mobile overflow fix** shipped earlier (`feeabab`): `input[type=date]` appearance reset + StepShell flex-wrap.
 ### 2026-06-23
 - Pricing restructured from one $950 package to **two tiers** (LLM-council recommendation, both opinions converged): **The Ceremony $1,150** (anchor) + **The Ceremony, Complete $1,490** (hero, recommended). The Zoom rehearsal + Custom Script Review moved OUT of paid add-ons and INTO the Complete tier (they are the failure-prevention core, not upsells). Remaining add-ons: certificate $69, celebrant-in-attendance $299. Prices are PROVISIONAL "founding-couples" rates pending Sarah's sign-off (see `docs/pricing-recommendation.md`); step Complete to ~$1,790 once proof exists.
 - Money path made tier-aware end to end: `lib/stripe/pricing.ts` (TIERS + tier-aware `computeTotal(tier, extras)`), `booking/schema.ts` (tier in payload), checkout + webhook routes, migration 004 (`tier` column, base default 149000), wizard (reads `?tier=`, displays + "Change package"), receipt email. Display swept across home/pricing/faq/terms/sticky-bar/JSON-LD (now an AggregateOffer $1,150-$1,490)/site.ts/course UI/design-book. Build PASS (exit 0), token lint 6/6 clean, runtime-verified on :5067.
@@ -37,7 +41,7 @@ See `docs/artifacts/file-manifest.md` (routes, components, lib, migrations). Key
 - Phases 0-3 built end to end. Phase 1 re-aimed from editorial to "Recessional Pop" per user. 2.5 Design Book review + typography/spacing fix pass.
 
 ## Open Questions (for the client)
-- **Pricing approval (NEW, blocks launch):** approve the two-tier prices ($1,150 / $1,490 founding rate) or adjust. Also: does Sarah commit to the "mate won't freeze" rehearsal guarantee, and lead the page with her celebrant credentials? See `docs/pricing-recommendation.md`.
+- ~~Pricing approval~~ **DONE 2026-06-26: two-tier $1,150 / $1,490 approved.** Still open from the same doc: does Sarah commit to the "mate won't freeze" rehearsal guarantee, and lead the page with her celebrant credentials? (Operational, not blocking.) See `docs/pricing-recommendation.md`.
 - Brand-name primary: **Wedding Mates** (current) vs **Let's Get Wed** (matches domain; SEO prefers it). Currently built with Wedding Mates primary.
 - GST: are the $1,150 / $1,490 packages + extras GST-inclusive or exclusive? (Affects receipts + T&C.)
 - Exact legal mechanism wording (registered celebrant attends-and-officiates vs separate registration) + Sarah's surname + social `sameAs` URLs.
