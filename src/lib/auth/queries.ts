@@ -1,6 +1,6 @@
 import type { User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
-import { hasRealSupabase, isPreviewGatingBypass } from "@/lib/auth/preview";
+import { hasRealSupabase, isPreviewGatingBypass, isDemoMode } from "@/lib/auth/preview";
 
 /**
  * queries.ts -- server-only auth helpers used by the (course) gating layout and
@@ -38,7 +38,7 @@ export type CourseAccessState = "active" | "locked" | "preview";
  *   - "locked"  otherwise.
  */
 export async function getCourseAccess(): Promise<CourseAccessState> {
-  if (isPreviewGatingBypass()) return "preview";
+  if (isPreviewGatingBypass() || isDemoMode()) return "preview";
   if (!hasRealSupabase()) return "locked";
 
   try {

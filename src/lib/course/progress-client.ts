@@ -34,6 +34,12 @@ function browserHasRealSupabase(): boolean {
   return url.startsWith("https://") && url.includes(".supabase.co");
 }
 
+/** Mirror of preview.isDemoMode(), browser-safe. In demo there is no signed-in
+ *  user, so progress persists to sessionStorage rather than Supabase. */
+function browserIsDemoMode(): boolean {
+  return process.env.NEXT_PUBLIC_DEMO_MODE === "on";
+}
+
 function readSessionSlugs(): string[] {
   if (typeof window === "undefined") return [];
   try {
@@ -72,7 +78,7 @@ export interface UseProgress {
  * @param initial slugs the server already knows are complete (empty in preview).
  */
 export function useProgress(initial: string[] = []): UseProgress {
-  const real = browserHasRealSupabase();
+  const real = browserHasRealSupabase() && !browserIsDemoMode();
   const [completed, setCompleted] = useState<Set<string>>(
     () => new Set(initial),
   );

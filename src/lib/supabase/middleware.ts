@@ -1,6 +1,6 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { isPreviewGatingBypass } from "@/lib/auth/preview";
+import { isPreviewGatingBypass, isDemoMode } from "@/lib/auth/preview";
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
@@ -75,7 +75,7 @@ export async function updateSession(request: NextRequest) {
   // Unauthenticated visitor to a gated route -> /login. The preview bypass only
   // applies when there is no real Supabase project (dev preview), never in prod.
   if (!user && needsAuth) {
-    if (isPreviewGatingBypass()) {
+    if (isPreviewGatingBypass() || isDemoMode()) {
       return supabaseResponse;
     }
     return NextResponse.redirect(new URL("/login", baseOrigin));

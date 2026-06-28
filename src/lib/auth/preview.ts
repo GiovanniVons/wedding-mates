@@ -43,3 +43,22 @@ export function isPreviewGatingBypass(): boolean {
   const flag = process.env.NEXT_PUBLIC_PREVIEW_GATING === "off-for-preview";
   return flag && !hasRealSupabase();
 }
+
+/**
+ * isDemoMode -- an EXPLICIT, separate opt-in that opens the gated /course as a
+ * public DEMO without an account, EVEN when a real Supabase project is set.
+ *
+ * Unlike isPreviewGatingBypass() above, this is deliberately NOT auto-disabled
+ * by a real Supabase URL: it is a conscious switch for a demo / showcase deploy
+ * (or local walkthrough) so prospects and the client can experience the course
+ * without going through Stripe + account creation. OFF by default.
+ *
+ * SAFETY: turning this on makes the course content publicly reachable without
+ * payment. Intended ONLY for a demo/review deploy or local preview, NEVER the
+ * live selling storefront. The course renders with a visible "Demo" banner so
+ * it can't be mistaken for the real signed-in experience, stays noindex, and
+ * progress is per-session (sessionStorage) rather than written to Supabase.
+ */
+export function isDemoMode(): boolean {
+  return process.env.NEXT_PUBLIC_DEMO_MODE === "on";
+}

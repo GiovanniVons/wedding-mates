@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { hasRealSupabase } from "@/lib/auth/preview";
+import { hasRealSupabase, isDemoMode } from "@/lib/auth/preview";
 
 /**
  * progress.ts -- SERVER-side reader for lesson_progress (migration 003).
@@ -18,7 +18,9 @@ import { hasRealSupabase } from "@/lib/auth/preview";
  * the rows to auth.uid(), so a user only ever sees their own completions.
  */
 export async function getCompletedSlugs(): Promise<Set<string>> {
-  if (!hasRealSupabase()) return new Set();
+  // Demo mode + local preview have no signed-in user; progress lives in the
+  // browser (sessionStorage) instead, so skip the server read entirely.
+  if (!hasRealSupabase() || isDemoMode()) return new Set();
   try {
     const supabase = await createClient();
     const {
